@@ -1,0 +1,33 @@
+package route
+
+import (
+	"github.com/attapon-th/go-pkg/rapidoc"
+	"github.com/gofiber/fiber/v2"
+	"github.com/spf13/viper"
+)
+
+var (
+	RegisRoutes []func(fiber.Router) error
+	UrlPrefix   string
+)
+
+func Init(app fiber.Router) {
+
+	// controller.Init()
+
+	// Set Url Prefix in ENV: APP_Prefix
+	UrlPrefix = viper.GetString("prefix")
+
+	app.Use(UrlPrefix+"/",
+		CORS(),
+		LoggerAccess(),
+	)
+
+	app.Get(UrlPrefix+"/rapidoc/*", rapidoc.New(rapidoc.Config{
+		Title:      "Loghealth API",
+		HeaderText: "Loghealth API",
+		SpecURL:    UrlPrefix + "/rapidoc/docs/swagger.json",
+		LogoURL:    "https://indev.moph.go.th/blog/wp-content/uploads/2021/03/logo.png",
+	}))
+
+}
