@@ -9,6 +9,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+const (
+	ENV_PREFIX = "APP"
+)
+
 var (
 	AppName string
 	Version string
@@ -32,8 +36,10 @@ func init() {
 }
 
 func main() {
-	viper.SetEnvPrefix("APP")
+	setDefaultConfig()
+	viper.SetEnvPrefix(ENV_PREFIX)
 	viper.AutomaticEnv()
+	printConfig()
 
 	fConfig := fiber.Config{}
 	// production mode
@@ -50,5 +56,22 @@ func main() {
 	// Start Server Listener
 	if err := app.Listen(viper.GetString("listen")); err != nil {
 		log.Fatal().Err(err).Msg("")
+	}
+}
+
+func setDefaultConfig() {
+	v := viper.New()
+	v.SetConfigFile("default.env")
+	if err := v.ReadInConfig(); err != nil {
+		log.Error().Err(err).Msg("defautl config error.")
+	}
+	for _, k := range v.AllKeys() {
+		viper.SetDefault(k, v.Get(k))
+	}
+}
+
+func printConfig() {
+	for _, k := range viper.AllKeys() {
+		log.Debug().Msgf("Config: %s => %v", k, viper.Get(k))
 	}
 }
