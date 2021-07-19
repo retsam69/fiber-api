@@ -35,9 +35,9 @@ mod: update-go-deps
 	go mod tidy
 	go mod vendor
 
-git-cp:
-	git add .
-	git commit --amend
+git:
+	git add . & \
+	git commit -m "update: $(date)" & \
 	git push
 
 docker-build:
