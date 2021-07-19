@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/attapon-th/go-pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/phuslu/log"
@@ -24,7 +26,7 @@ var (
 // @securityDefinitions.basic BasicAuth
 
 func init() {
-	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build
+	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
 	// Default Logger `github.com/attapon-th/go-pkg/logger` BaseBy: `github.com/phuslu/log`
 	logger.SetDefaultlogger(logger.GetLogger(log.DebugLevel))
 }
