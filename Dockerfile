@@ -1,9 +1,4 @@
 ############################
-# - Docker file Example for Golang into scratch image - #
-############################
-# Argument require
-ARG BUILDDOCKER
-############################
 # STEP 1 build executable binary
 ############################
 FROM golang:1.16-alpine  as builder
@@ -28,9 +23,9 @@ ADD . .
 # Create directory for binary
 RUN mkdir -p /app 
 
+ARG BUILDDOCKER
 # build go file
 RUN BUILD=${BUILDDOCKER} \
-    BINARY=${BINARY} \
     make build-in-docker move-in-docker
 
 ############################
