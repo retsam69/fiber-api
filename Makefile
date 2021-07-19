@@ -11,7 +11,8 @@ endif
 # go main file
 GOMAINFILE=main.go
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
-GIT_REGISTRY_URL="registry.gitlab.com/indev-moph/{}"
+GO_MODULE=`cat go.mod | grep -m1 "module " | sed 's/^module \(.*\)$/\1/'`
+GIT_REGISTRY_URL="registry.${GO_MODULE}"
 
 
 dev:
