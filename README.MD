@@ -2,15 +2,11 @@
 # By `gofiber/fiber` Framework
 
 ## Get Project
-### Step 1
 ```shell
-git clone https://gitlab.com/indev-moph/fiber-api.git YOUR_PROJECT
-```
+cd __YOUR_PROJECT__
 
-### Step 2
-```shell
-cd YOUR_PROJECT
-./init
+git clone https://gitlab.com/indev-moph/fiber-api.git
+./init.sh
 ```
 
 ### Config BY ENV
