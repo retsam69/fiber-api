@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
+	"github.com/attapon-th/go-pkg/logger"
 	"github.com/gofiber/fiber/v2"
+	"github.com/phuslu/log"
 	"github.com/spf13/viper"
 )
 
@@ -25,15 +24,19 @@ var (
 // @securityDefinitions.basic BasicAuth
 
 func init() {
-	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
+	// Default Logger `github.com/attapon-th/go-pkg/logger` BaseBy: `github.com/phuslu/log`
+	logger.SetDefaultlogger(logger.GetLogger(log.DebugLevel))
 }
 
 func main() {
 	viper.SetEnvPrefix("APP")
 	viper.AutomaticEnv()
 
-	fConfig := fiber.Config{
-		DisableStartupMessage: !viper.GetBool("dev"),
+	fConfig := fiber.Config{}
+	// production mode
+	if !viper.GetBool("dev") {
+		fConfig.DisableStartupMessage = true
+		log.DefaultLogger.Caller = 0
 	}
 	_ = viper.UnmarshalKey("fiber", &fConfig)
 	app := fiber.New(fConfig)
@@ -43,6 +46,6 @@ func main() {
 
 	// Start Server Listener
 	if err := app.Listen(viper.GetString("listen")); err != nil {
-		log.Panicln(err)
+		log.Fatal().Err(err).Msg("")
 	}
 }

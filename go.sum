@@ -45,6 +45,8 @@ github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kd
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=
+github.com/attapon-th/go-pkg/logger v0.0.0-20210714051751-0d235286ee0c h1:reEAs6Dv+tCtCueg64JIHe7WugIwbTg0EcH+E75erIs=
+github.com/attapon-th/go-pkg/logger v0.0.0-20210714051751-0d235286ee0c/go.mod h1:srxEMvQAbUX+BqJJts+SabdFDBJ/mHz92FDGv/0hl8Q=
 github.com/attapon-th/go-pkg/rapidoc v0.0.0-20210714051751-0d235286ee0c h1:Mr2BoR2SKQAr5brf7fpnnxTabzVS5549whNi8mx1Auc=
 github.com/attapon-th/go-pkg/rapidoc v0.0.0-20210714051751-0d235286ee0c/go.mod h1:XKSVMbs67rEVvFzxCLE6S+o5uoPwmGPVXLGs4woKlGM=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
@@ -204,6 +206,9 @@ github.com/modern-go/reflect2 v1.0.1/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3Rllmb
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
 github.com/pelletier/go-toml v1.9.3 h1:zeC5b1GviRUyKYd6OJPvBU/mcVDVoL1OhT17FCt5dSQ=
 github.com/pelletier/go-toml v1.9.3/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
+github.com/phuslu/log v1.0.70/go.mod h1:kzJN3LRifrepxThMjufQwS7S35yFAB+jAV1qgA7eBW4=
+github.com/phuslu/log v1.0.74 h1:LcAeO6VfcC37ebIQA3Eq4Q0/qmggYTJWN0k5MWr6Myg=
+github.com/phuslu/log v1.0.74/go.mod h1:kzJN3LRifrepxThMjufQwS7S35yFAB+jAV1qgA7eBW4=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/sftp v1.10.1/go.mod h1:lYOWFsE0bwd1+KfKJaKeuokY15vzFx25BLbzYYoAxZI=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
