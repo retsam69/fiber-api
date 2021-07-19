@@ -58,3 +58,4 @@ build-in-docker:
 	
 move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
+	cp default.env /app/default.env

@@ -53,6 +53,7 @@ func main() {
 	// Startup router
 	// route.Init(app)
 
+	log.Info().Msg("start server listener...")
 	// Start Server Listener
 	if err := app.Listen(viper.GetString("listen")); err != nil {
 		log.Fatal().Err(err).Msg("")
