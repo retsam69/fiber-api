@@ -37,7 +37,7 @@ mod: update-go-deps
 
 git:
 	git add . 
-	git commit -m "update: $(date)" 
+	git commit -m "update" 
 	git push -u origin main
 
 docker-build:
