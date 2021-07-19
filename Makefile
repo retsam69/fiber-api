@@ -36,8 +36,8 @@ mod: update-go-deps
 	go mod vendor
 
 git:
-	git add . & \
-	git commit -m "update: $(date)" & \
+	git add . 
+	git commit -m "update: $(date)" 
 	git push
 
 docker-build:
