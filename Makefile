@@ -16,11 +16,7 @@ GIT_REGISTRY_URL="registry.${GO_MODULE}"
 
 
 dev:
-	USER_ADMIN=1234
-	APP_DEV=true \
-	APP_LISTEN=127.0.0.1:8888 \
-	APP_PREFIX=/api \
-	go run ${LDFLAGS} main.go
+	go run ${LDFLAGS} main.go -c dev.env
 
 swagger:
 	swag init

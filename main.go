@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/attapon-th/go-pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/phuslu/log"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -14,9 +17,10 @@ const (
 )
 
 var (
-	AppName string
-	Version string
-	Build   string
+	AppName    string
+	Version    string
+	Build      string
+	ConfigFile = pflag.StringP("config", "c", "", "config file path")
 )
 
 // @title Indev API
@@ -26,7 +30,7 @@ var (
 // @contact.url https://indev.moph.go.th/blog/
 // @contact.email researchmoph@gmail.com
 // @host indev.moph.go.th
-// @BasePath /api
+// @BasePath /
 // @securityDefinitions.basic BasicAuth
 
 func init() {
@@ -36,9 +40,13 @@ func init() {
 }
 
 func main() {
-	setDefaultConfig()
+	pflag.Parse()
+	loadConfigByFile(*ConfigFile)
+
+	loadEnvByPrefix("APP_", true)
 	viper.SetEnvPrefix(ENV_PREFIX)
 	viper.AutomaticEnv()
+
 	printConfig()
 
 	fConfig := fiber.Config{}
@@ -60,14 +68,32 @@ func main() {
 	}
 }
 
-func setDefaultConfig() {
+func loadConfigByFile(filename string) {
 	v := viper.New()
-	v.SetConfigFile("default.env")
+	v.SetConfigFile(filename)
 	if err := v.ReadInConfig(); err != nil {
-		log.Error().Err(err).Msg("defautl config error.")
+		log.Warn().Err(err).Msg("defautl config error.")
 	}
 	for _, k := range v.AllKeys() {
 		viper.SetDefault(k, v.Get(k))
+	}
+}
+
+func loadEnvByPrefix(pf string, isTrim bool) {
+	if len(pf) == 0 {
+		return
+	}
+	for _, kv := range os.Environ() {
+		if strings.HasPrefix(kv, pf) {
+			if isTrim {
+				kv = strings.TrimPrefix(kv, pf)
+			}
+			s := strings.SplitN(kv, "=", 2)
+			if len(s) == 2 {
+				viper.SetDefault(s[0], s[1])
+			}
+
+		}
 	}
 }
 
