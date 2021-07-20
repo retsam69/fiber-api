@@ -53,6 +53,7 @@ func main() {
 	// production mode
 	if !viper.GetBool("dev") {
 		fConfig.DisableStartupMessage = true
+		log.DefaultLogger = logger.GetLoggerJson(log.DebugLevel)
 		log.DefaultLogger.Caller = 0
 	}
 	_ = viper.UnmarshalKey("fiber", &fConfig)
