@@ -5,7 +5,7 @@
 ```shell
 cd __YOUR_PROJECT__
 
-git clone https://gitlab.com/indev-moph/fiber-api.git
+git clone https://gitlab.com/indev-moph/fiber-api.git .
 ./init.sh
 ```
 
