@@ -23,11 +23,12 @@ func Init(app fiber.Router) {
 		LoggerAccess(),
 	)
 
-	app.Get(UrlPrefix+"/rapidoc/*", rapidoc.New(rapidoc.Config{
-		Title:      "Loghealth API",
-		HeaderText: "Loghealth API",
-		SpecURL:    UrlPrefix + "/rapidoc/docs/swagger.json",
-		LogoURL:    "https://indev.moph.go.th/blog/wp-content/uploads/2021/03/logo.png",
+	app.Get(UrlPrefix+"/docs/*", rapidoc.New(rapidoc.Config{
+		Title:       "Service API",
+		HeaderText:  "Service API",
+		RenderStyle: rapidoc.RenderStyle_View,
+		SpecURL:     UrlPrefix + "/docs/docs/openapi.yaml",
+		LogoURL:     "https://indev.moph.go.th/blog/wp-content/uploads/2021/03/logo.png",
 	}))
 
 }

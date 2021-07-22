@@ -11,7 +11,7 @@ endif
 # go main file
 GOMAINFILE=main.go
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
-GO_MODULE=`cat go.mod | grep -m1 "module " | sed 's/^module \(.*\)$/\1/'`
+GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
 GIT_REGISTRY_URL="registry.${GO_MODULE}"
 
 
@@ -19,7 +19,13 @@ dev:
 	go run ${LDFLAGS} main.go -c dev.env
 
 swagger:
-	swag init
+	swagger:
+	rm -rf ./docs/v3
+	rm -f ./docs/*.gz
+	swag init --exclude vendor
+	openapi-generator generate -i ./docs/swagger.yaml -o ./docs/v3 -g openapi-yaml --minimal-update
+	cp ./docs/v3/openapi/openapi.yaml ./docs/openapi.yaml
+
 
 update-go-deps:
 	go mod tidy
@@ -55,4 +61,3 @@ build-in-docker:
 	
 move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
-	cp default.env /app/default.env
