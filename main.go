@@ -43,7 +43,9 @@ func main() {
 	pflag.Parse()
 	loadConfigByFile(*ConfigFile)
 
+	// load os env from prefix env
 	loadEnvByPrefix("APP_", true)
+	loadEnvByPrefix("USER_", false)
 	viper.SetEnvPrefix(ENV_PREFIX)
 	viper.AutomaticEnv()
 
