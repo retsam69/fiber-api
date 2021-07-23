@@ -19,7 +19,6 @@ dev:
 	go run ${LDFLAGS} main.go -c dev.env
 
 swagger:
-	swagger:
 	rm -rf ./docs/v3
 	rm -f ./docs/*.gz
 	swag init --exclude vendor
