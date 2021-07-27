@@ -80,6 +80,8 @@ func loadConfigByFile(filename string) {
 	for _, k := range v.AllKeys() {
 		viper.SetDefault(k, v.Get(k))
 	}
+	viper.SetDefault("version", Version)
+	viper.SetDefault("Build", Build)
 }
 
 func loadEnvByPrefix(pf string, isTrim bool) {
