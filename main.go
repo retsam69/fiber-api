@@ -81,7 +81,7 @@ func loadConfigByFile(filename string) {
 		viper.SetDefault(k, v.Get(k))
 	}
 	viper.SetDefault("version", Version)
-	viper.SetDefault("Build", Build)
+	viper.SetDefault("build", Build)
 }
 
 func loadEnvByPrefix(pf string, isTrim bool) {
