@@ -23,7 +23,7 @@ swagger:
 	rm -f ./docs/*.gz
 	swag init --exclude vendor
 	openapi-generator generate -i ./docs/swagger.yaml -o ./docs/v3 -g openapi-yaml --minimal-update
-	cp ./docs/v3/openapi/openapi.yaml ./docs/openapi.yaml
+	cp ./docs/v3/openapi/openapi.yaml ./docs/openapi-${VERSION}.yaml
 
 
 update-go-deps:
