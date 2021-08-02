@@ -37,6 +37,9 @@ func init() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
 	// Default Logger `github.com/attapon-th/go-pkg/logger` BaseBy: `github.com/phuslu/log`
 	logger.SetDefaultlogger(logger.GetLogger(log.DebugLevel))
+
+	viper.SetDefault("version", Version)
+	viper.SetDefault("build", Build)
 }
 
 func main() {
@@ -80,8 +83,7 @@ func loadConfigByFile(filename string) {
 	for _, k := range v.AllKeys() {
 		viper.SetDefault(k, v.Get(k))
 	}
-	viper.SetDefault("version", Version)
-	viper.SetDefault("build", Build)
+
 }
 
 func loadEnvByPrefix(pf string, isTrim bool) {
