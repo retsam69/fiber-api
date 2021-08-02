@@ -19,8 +19,7 @@ dev:
 	go run ${LDFLAGS} main.go -c dev.env
 
 swagger:
-	rm -rf ./docs/v3
-	rm -f ./docs/*.gz
+	rm -rf ./docs
 	swag init --exclude vendor
 	openapi-generator generate -i ./docs/swagger.yaml -o ./docs/v3 -g openapi-yaml --minimal-update
 	cp ./docs/v3/openapi/openapi.yaml ./docs/openapi-${VERSION}.yaml
