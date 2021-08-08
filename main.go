@@ -44,7 +44,7 @@ func init() {
 
 func main() {
 	pflag.Parse()
-	loadConfigByFile(*ConfigFile)
+	loadConfigByFile(*ConfigFile, "APP_")
 
 	// load os env from prefix env
 	loadEnvByPrefix("APP_", true)
@@ -74,14 +74,19 @@ func main() {
 	}
 }
 
-func loadConfigByFile(filename string) {
+func loadConfigByFile(filename string, prefixTrims ...string) {
 	v := viper.New()
 	v.SetConfigFile(filename)
 	if err := v.ReadInConfig(); err != nil {
 		log.Warn().Err(err).Msg("defautl config error.")
 	}
-	for _, k := range v.AllKeys() {
-		viper.SetDefault(k, v.Get(k))
+	for _, name := range v.AllKeys() {
+		k := strings.ToLower(name)
+		for _, pf := range prefixTrims {
+			pf = strings.ToLower(pf)
+			k = strings.TrimPrefix(k, pf)
+		}
+		viper.SetDefault(k, v.Get(name))
 	}
 
 }
