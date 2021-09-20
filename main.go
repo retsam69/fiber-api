@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/attapon-th/go-pkg/logger"
+	logger "github.com/attapon-th/phuslulogger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
@@ -36,7 +36,7 @@ var (
 func init() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
 	// Default Logger `github.com/attapon-th/go-pkg/logger` BaseBy: `github.com/phuslu/log`
-	logger.SetDefaultlogger(logger.GetLogger(log.DebugLevel))
+	logger.SetDefaultlogger()
 
 	viper.SetDefault("version", Version)
 	viper.SetDefault("build", Build)
@@ -58,8 +58,7 @@ func main() {
 	// production mode
 	if !viper.GetBool("dev") {
 		fConfig.DisableStartupMessage = true
-		log.DefaultLogger = logger.GetLoggerJson(log.DebugLevel)
-		log.DefaultLogger.Caller = 0
+		log.DefaultLogger = logger.GetLoggerConsole(log.DebugLevel, 0)
 	}
 	_ = viper.UnmarshalKey("fiber", &fConfig)
 	app := fiber.New(fConfig)

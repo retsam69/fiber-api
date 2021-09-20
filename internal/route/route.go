@@ -3,7 +3,7 @@ package route
 import (
 	"fmt"
 
-	"github.com/attapon-th/go-pkg/rapidoc"
+	rapidoc "github.com/attapon-th/gofiber-rapidoc"
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 )
