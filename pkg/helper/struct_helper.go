@@ -26,6 +26,8 @@ func ParseTagDefault(field reflect.StructField, tag_name string) string {
 	if tag, ok := field.Tag.Lookup(tag_name); ok {
 		if idx := strings.Index(tag, ","); idx != -1 {
 			return tag[:idx]
+		} else {
+			return tag
 		}
 	}
 	return ToSnakeCase(field.Name)
