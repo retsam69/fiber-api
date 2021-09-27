@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/phuslu/log"
 	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -16,19 +18,38 @@ func Init() {
 
 }
 
-// Example Mysql
-func ConnectDB() *gorm.DB {
-	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
-	dsn := viper.GetString("db_dsn")
-	// log.Debug().Msg(dsn)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		QueryFields: true,
-	})
-	if err != nil {
-		log.Fatal().Err(err).Msg("error config connect database: `MOPHIC`")
+// Connect DB
+// Go IMPORT
+// "github.com/attapon-th/gorm_vertica/vertica"
+// "github.com/phuslu/log"
+// "github.com/spf13/viper"
+// "gorm.io/driver/clickhouse"
+// "gorm.io/driver/mysql"
+// "gorm.io/driver/postgres"
+// "gorm.io/driver/sqlserver"
+func ConnectDB(dsn string, driverName string) (db *gorm.DB, err error) {
+	var ErrDriverNotSupport = fmt.Errorf("Driver: `%s` not supported.", driverName)
+	if strings.Contains(driverName, "mysql") {
+		// db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	} else if strings.Contains(driverName, "postgres") {
+		// db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	} else if strings.Contains(driverName, "ssqlserverql") {
+		// db, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+
+	} else if strings.Contains(driverName, "clickhouse") {
+		// db, err = gorm.Open(clickhouse.Open(dsn), &gorm.Config{})
+
+	} else if strings.Contains(driverName, "vertica") {
+		// db, err = gorm.Open(vertica.Open(dsn), &gorm.Config{})
+
+	} else {
+		log.Error().Err(ErrDriverNotSupport).Msgf("Driver Not supported.")
+		err = ErrDriverNotSupport
 	}
-	if viper.GetBool("dev") {
+	if err == nil && viper.GetBool("DEV") {
 		db = db.Debug()
 	}
-	return db
+	return
 }
