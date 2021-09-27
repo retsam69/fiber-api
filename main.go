@@ -25,7 +25,7 @@ var (
 
 // @title Indev API
 // @version 1.1
-// @description Get Vaccine Immunization And Vaccine Inventory Stock
+// @description API Service
 // @contact.name Indev-ICT@MOPH Team
 // @contact.url https://indev.moph.go.th/blog/
 // @contact.email researchmoph@gmail.com
