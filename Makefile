@@ -67,4 +67,4 @@ move-in-docker:
 server-up:
 	@echo "Server Up ${SSH_NAME}"
 	ssh ${SSH_NAME} "docker pull ${GIT_REGISTRY_URL}:latest; \
-	docker service update --image ${GIT_REGISTRY_URL}:latest ${SERVICE_NAME};"
+	docker service update --force ${SERVICE_NAME};"
