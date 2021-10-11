@@ -25,8 +25,7 @@ RUN mkdir -p /app
 
 ARG BUILDDOCKER
 # build go file
-RUN BUILD=${BUILDDOCKER} \
-    make build-in-docker move-in-docker
+RUN make build-in-docker move-in-docker
 
 ############################
 # STEP 2 build a small image

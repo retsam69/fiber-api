@@ -1,13 +1,10 @@
 .PHONY: all
-ifndef BINARY
 BINARY=AppMain
-endif
-ifndef VERSION
-VERSION=0.0.1
-endif
-ifndef BUILD
-BUILD=`git rev-parse HEAD`
-endif
+VERSION=0.0.3
+BUILD=6625df5608de329bf8c0b88719b67f95fb930d8a
+
+
+
 # go main file
 GOMAINFILE=main.go
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
@@ -43,9 +40,12 @@ git:
 	git commit -m "update" 
 	git push
 
+ver:
+	./.bin/gmf i
+	./.bin/gmf b
+
 docker-build:
 	docker build \
-	--build-arg BUILDDOCKER=$(BUILD) \
 	-t ${GIT_REGISTRY_URL}:latest .
 
 docker-addtags:
