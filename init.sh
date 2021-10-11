@@ -8,6 +8,6 @@ read -p 'Input Go Module: ' gopack
 go mod init ${gopack}
 make mod
 mkdir -p .bin
-go build -o ./.bin/gmf cmd/gmf/gmf.go
+go install cmd/gmf/gmf.go
 rm -rf cmd
 rm -f init.sh

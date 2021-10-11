@@ -42,8 +42,8 @@ git:
 	git push
 
 ver:
-	./.bin/gmf i
-	./.bin/gmf b
+	gmf i
+	gmf b
 
 docker-build:
 	docker build \

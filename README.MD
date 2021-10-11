@@ -8,6 +8,17 @@ cd __YOUR_PROJECT__
 git clone https://gitlab.com/indev-moph/fiber-api.git .
 ./init.sh
 ```
+## Set `go/bin` path in `$PATH` Envolopment if your not set
+Check go path
+```shell
+go env GOPATH
+echo $PATH
+```
+Set `$PATH`
+```shell
+export PATH=$PATH:$GOPATH/bin
+```
+    
 
 ## Step 2: Uncomment
 1. `main.go`  
