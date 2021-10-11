@@ -14,6 +14,8 @@ LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
 GIT_REGISTRY_URL="registry.${GO_MODULE}"
 
+SSH_NAME=ssh_name
+SERVICE_NAME=docker_service_name
 
 dev:
 	go run ${LDFLAGS} main.go -c dev.env
@@ -59,3 +61,9 @@ build-in-docker:
 	
 move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
+
+
+server-up:
+	@echo "Server Up ${SSH_NAME}"
+	ssh ${SSH_NAME} "docker pull ${GIT_REGISTRY_URL}:latest; \
+	docker service update --image ${GIT_REGISTRY_URL}:latest ${SERVICE_NAME};"
