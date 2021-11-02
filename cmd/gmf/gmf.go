@@ -56,7 +56,7 @@ func main() {
 func help() {
 	log.Info().Str("command", "h").Msg("Help")
 	log.Info().Str("command", "v").Msg("Show version")
-	log.Info().Str("command", "vi").Msg("Increment minor version")
+	log.Info().Str("command", "i").Msg("Increment minor version")
 	log.Info().Str("command", "b").Msg("Build hash")
 }
 

@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strings"
 
 	logger "github.com/attapon-th/phuslulogger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	_ "github.com/spf13/viper/remote"
+	"gitlab.com/indev-moph/fiber-api/cmd/cmd_api"
 )
 
 const (
@@ -44,16 +44,8 @@ func init() {
 
 func main() {
 	pflag.Parse()
-	loadConfigByFile(*ConfigFile, "APP_")
-
-	// load os env from prefix env
-	loadEnvByPrefix("APP_", true)
-	loadEnvByPrefix("USER_", false)
-	viper.SetEnvPrefix(ENV_PREFIX)
-	viper.AutomaticEnv()
-
-	printConfig()
-
+	viper.BindPFlags(pflag.CommandLine)
+	cmd_api.Init()
 	fConfig := fiber.Config{}
 	// production mode
 	if !viper.GetBool("dev") {
@@ -70,46 +62,5 @@ func main() {
 	// Start Server Listener
 	if err := app.Listen(viper.GetString("listen")); err != nil {
 		log.Fatal().Err(err).Msg("")
-	}
-}
-
-func loadConfigByFile(filename string, prefixTrims ...string) {
-	v := viper.New()
-	v.SetConfigFile(filename)
-	if err := v.ReadInConfig(); err != nil {
-		log.Warn().Err(err).Msg("defautl config error.")
-	}
-	for _, name := range v.AllKeys() {
-		k := strings.ToLower(name)
-		for _, pf := range prefixTrims {
-			pf = strings.ToLower(pf)
-			k = strings.TrimPrefix(k, pf)
-		}
-		viper.SetDefault(k, v.Get(name))
-	}
-
-}
-
-func loadEnvByPrefix(pf string, isTrim bool) {
-	if len(pf) == 0 {
-		return
-	}
-	for _, kv := range os.Environ() {
-		if strings.HasPrefix(kv, pf) {
-			if isTrim {
-				kv = strings.TrimPrefix(kv, pf)
-			}
-			s := strings.SplitN(kv, "=", 2)
-			if len(s) == 2 {
-				viper.SetDefault(s[0], s[1])
-			}
-
-		}
-	}
-}
-
-func printConfig() {
-	for _, k := range viper.AllKeys() {
-		log.Debug().Msgf("Config: %s => %v", k, viper.Get(k))
 	}
 }

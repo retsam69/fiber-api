@@ -1,0 +1,9 @@
+app:
+  dev: false
+  listen: 127.0.0.1
+  port: 80
+  prefix: /api/v2
+
+auth:
+  # basic:
+  #   admin: 1234

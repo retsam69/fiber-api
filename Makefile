@@ -16,7 +16,7 @@ SSH_NAME=ssh_name
 SERVICE_NAME=docker_service_name
 
 dev:
-	go run ${LDFLAGS} main.go -c dev.env
+	go run ${LDFLAGS} main.go -c dev.yaml
 
 swagger:
 	rm -rf ./docs
