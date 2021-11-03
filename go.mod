@@ -3,8 +3,6 @@ module gitlab.com/indev-moph/fiber-api
 go 1.16
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
-	github.com/arsmn/fiber-swagger/v2 v2.20.0
 	github.com/attapon-th/gofiber-rapidoc v1.0.0
 	github.com/attapon-th/phuslulogger v1.0.1
 	github.com/gofiber/fiber/v2 v2.21.0
@@ -14,6 +12,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.9.0
 	github.com/swaggo/swag v1.7.4
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gorm.io/gorm v1.22.2
 )

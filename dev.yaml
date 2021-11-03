@@ -1,8 +1,6 @@
 app:
   dev: true
-  listen: 127.0.0.1
-  port: 8888
-  prefix: /
+  baseurl: http://indev.moph.go.th:8888/api/v2
 
 auth:
   basic:

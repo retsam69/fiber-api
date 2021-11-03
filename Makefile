@@ -1,7 +1,8 @@
 .PHONY: all
 BINARY=AppMain
 VERSION=0.0.0
-BUILD=e8bd8dba85ed38d0c8d2b7cd3af3a3083d3d93cc
+BUILD=ff8f8ac4f4a3e43945b76621c13fc9e99878f1ec
+
 
 
 
@@ -20,9 +21,13 @@ dev:
 
 swagger:
 	rm -rf ./docs
-	swag init --exclude vendor
-	openapi-generator generate -i ./docs/swagger.yaml -o ./docs/v3 -g openapi-yaml --minimal-update
-	cp ./docs/v3/openapi/openapi.yaml ./docs/openapi-${VERSION}.yaml
+	swag init --parseInternal --generatedTime
+	rm -rf ./docs/docs.go
+	curl -X POST "https://converter.swagger.io/api/convert" \
+	-H "accept: application/json" \
+	-H "Content-Type: application/json" \
+	-d @./docs/swagger.json \
+	> docs/openapi-${VERSION}.json
 
 
 update-go-deps:
@@ -37,15 +42,16 @@ mod: update-go-deps
 	go mod vendor
 
 git:
-	git add . 
-	git commit -m "update" 
+	-git add . 
+	-git commit -m "update" 
 	git push
 
-ver:
+version-up:
 	gmf i
 	gmf b
+	gmf v
 
-docker-build:
+docker-build: version-up git swagger
 	docker build \
 	-t ${GIT_REGISTRY_URL}:latest .
 

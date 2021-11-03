@@ -1,6 +1,7 @@
 package cmd_api
 
 import (
+	"net/url"
 	"strings"
 
 	"github.com/phuslu/log"
@@ -14,6 +15,7 @@ func Init() {
 	}
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "-"))
 	viper.AutomaticEnv()
+	ParseBaseURL()
 	printConfig()
 }
 
@@ -32,6 +34,27 @@ func LoadConfigByFile(filename string, isDefault bool) {
 
 	}
 
+}
+
+func ParseBaseURL() {
+	if u, err := url.Parse(viper.GetString("app.baseurl")); err != nil {
+		log.Fatal().Err(err).Msgf("error: app.baseurl")
+	} else {
+		viper.SetDefault("app.hostname", u.Hostname())
+		if u.Port() == "" {
+			viper.SetDefault("app.port", 80)
+		} else {
+			viper.SetDefault("app.port", u.Port())
+		}
+
+		viper.SetDefault("app.schema", u.Scheme)
+		viper.SetDefault("app.prefix", u.Path)
+		if viper.GetBool("app.dev") {
+			viper.SetDefault("app.listen", "127.0.0.1")
+		} else {
+			viper.SetDefault("app.listen", "0.0.0.0")
+		}
+	}
 }
 
 func printConfig() {
