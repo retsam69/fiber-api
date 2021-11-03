@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
-	"gitlab.com/indev-moph/fiber-api/cmd/cmd_api"
-	"gitlab.com/indev-moph/fiber-api/internal/route"
 )
 
 const (
@@ -39,10 +37,11 @@ func main() {
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 
-	// load config or etc.
-	cmd_api.Init()
-	// start http server
-	StartFiberServer(route.Init)
+	// ---- Plaase Uncommant ----
+	// // load config or etc.
+	// cmd_api.Init()
+	// // start http server
+	// StartFiberServer(route.Init)
 }
 
 func SetLogger() {
