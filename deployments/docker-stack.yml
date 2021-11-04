@@ -1,12 +1,13 @@
 version: "3.3"
 services:
   ${SERVICE}:
-    image: registry.gitlab.com/indev-moph/fiber-api:latest 
+    image: ${IMAGE}:latest 
     environment:
       - TZ=Asia/Bangkok
-      - APP__DEV=false
-      - APP__BASEURL=https://indev.moph.go.th/api/v2
-      - APP__PORT=80
+      - APP.DEV=false
+      - APP.BASEURL=https://${DOMAIN}/${PREFIX}
+      - APP.PORT=80
+      
     volumes:
       - ${SERVICE}_log:/app/logs
     deploy:
@@ -17,7 +18,7 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.http.routers.${SERVICE}.tls=true"
         - "traefik.http.routers.${SERVICE}.entrypoints=websecure"
-        - "traefik.http.routers.${SERVICE}.rule=Host(`indev.moph.go.th`) && PathPrefix(`/api/v2`)"
+        - "traefik.http.routers.${SERVICE}.rule=Host(`${DOMAIN}`) && PathPrefix(`${PREFIX}`)"
         - "traefik.http.services.${SERVICE}.loadbalancer.server.port=80"
     networks:
       - traefik-public
