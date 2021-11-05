@@ -22,12 +22,12 @@ var (
 	ConfigFile = pflag.StringP("config", "c", "", "config file path")
 )
 
-// @title Indev API
-// @version 1.1
+// @title API
+// @version 1
 // @description API Service
-// @contact.name Indev-ICT@MOPH Team
-// @contact.url https://indev.moph.go.th/blog/
-// @contact.email researchmoph@gmail.com
+// @contact.name
+// @contact.url go.th/blog/
+// @contact.email
 // @host localhost:8888
 // @schemes http https
 // @BasePath /api/v2
