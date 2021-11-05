@@ -10,10 +10,9 @@ func init() {
 	RegisRoutes = append(RegisRoutes, EndpointPing)
 }
 
-// func Init() {
-// 	// DBConn = ConnectDB()
+func Init() {
 
-// }
+}
 
 // @Summary
 // @Description

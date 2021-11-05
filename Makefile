@@ -30,14 +30,15 @@ swagger:
 	> docs/openapi-${VERSION}.json
 
 
-update-go-deps:
+mod-up:
 	go mod tidy
 	@echo ">> updating Go dependencies"
 	@for m in $$(go list -mod=readonly -m -f '{{ if and (not .Indirect) (not .Main)}}{{.Path}}{{end}}' all); do \
 		go get $$m; \
 	done
+	go mod vendor
 
-mod: update-go-deps	
+mod:
 	go mod tidy
 	go mod vendor
 

@@ -35,7 +35,7 @@ var (
 func main() {
 	SetLogger()
 	pflag.Parse()
-	viper.BindPFlags(pflag.CommandLine)
+	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// ---- Plaase Uncommant ----
 	// // load config or etc.
