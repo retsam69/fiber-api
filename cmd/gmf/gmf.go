@@ -76,6 +76,7 @@ func SetName(name, value string) {
 	if i < 0 {
 		return
 	}
+	value = strings.TrimRight(value, "\n")
 	Lines[i] = fmt.Sprintf("%s=%s", name, value)
 	log.Info().Str(name, value).Msgf("updated")
 }

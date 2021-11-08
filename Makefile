@@ -19,9 +19,15 @@ SERVICE_NAME=docker_service_name
 dev:
 	go run ${LDFLAGS} main.go -c dev.yaml
 
-swagger:
+ swagger: swag2openapi
 	rm -rf ./docs
 	swag init --parseInternal --generatedTime
+
+swagger-prd: swag2openapi
+	rm -rf ./docs
+	swag init --parseInternal --generatedTime -g main.go-prd
+
+swag2openapi:
 	rm -rf ./docs/docs.go
 	curl -X POST "https://converter.swagger.io/api/convert" \
 	-H "accept: application/json" \
@@ -43,16 +49,15 @@ mod:
 	go mod vendor
 
 git:
-	-git add . 
-	-git commit -m "update" 
-	git push
+	git cpush
 
 version-up:
 	gmf i
 	gmf b
 	gmf v
 
-docker-build: version-up git swagger
+docker-build: version-up git
+	make swagger-prd
 	docker build \
 	-t ${GIT_REGISTRY_URL}:latest .
 
@@ -67,8 +72,12 @@ build-in-docker:
 	-a -installsuffix cgo ${LDFLAGS} \
 	-o ${BINARY} ${GOMAINFILE}
 	
+	
 move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
+	mkdir -p /app/docs
+	mv docs/openapi-${VERSION}.json /app/docs/openapi-${VERSION}.json
+	mv default.yml /app/default.yaml
 
 
 server-up:

@@ -61,7 +61,6 @@ func StartFiberServer(initFunc ...func(fiber.Router)) {
 		log.DefaultLogger = logger.GetLoggerFileAndConsole(
 			"logs/log.log", "logs/error.log", log.DebugLevel, 0)
 		go logger.RunLogFileRotation()
-		log.DefaultLogger = logger.GetLoggerConsole(log.DebugLevel, 0)
 	}
 
 	_ = viper.UnmarshalKey("fiber", &fConfig)
