@@ -6,5 +6,6 @@ rm -rf .git
 echo "Example GO Module: gitlab.com/indev-moph/fiber-api"
 read -p 'Input Go Module: ' gopack
 go mod init ${gopack}
-make mod
+make mod-up
+rm -rf cmd/gmf
 rm -f init.sh

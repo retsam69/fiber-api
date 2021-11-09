@@ -1,11 +1,7 @@
 .PHONY: all
 BINARY=AppMain
 VERSION=0.0.0
-BUILD=ff8f8ac4f4a3e43945b76621c13fc9e99878f1ec
-
-
-
-
+BUILD=
 
 # go main file
 GOMAINFILE=main.go
@@ -19,7 +15,7 @@ SERVICE_NAME=docker_service_name
 dev:
 	go run ${LDFLAGS} main.go -c dev.yaml
 
- swagger: 
+swagger: 
 	rm -rf ./docs
 	swag init --parseInternal --generatedTime
 	make swag2openapi
