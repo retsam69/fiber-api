@@ -1,7 +1,15 @@
 app:
   dev: true
-  baseurl: http://indev.moph.go.th:8888/api/v2
+  baseurl: http://localhost:8888/api
 
 auth:
   basic:
     admin: 1234
+
+db:
+  mysql:
+    dsn: mysql://root:1234@localhost:3306/dbname
+  radis:
+    user: root
+    pass: 123
+

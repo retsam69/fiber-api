@@ -11,8 +11,6 @@ require (
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.9.0
-	github.com/swaggo/swag v1.7.4
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gorm.io/gorm v1.22.2
 )

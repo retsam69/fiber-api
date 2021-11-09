@@ -8,15 +8,17 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Init() {
-	LoadConfigByFile("default.yaml", true)
-	if fileConfig := viper.GetString("config"); fileConfig != "" {
-		LoadConfigByFile(fileConfig, false)
+func loadDefaultConfig() {
+	sr := strings.NewReader(CONFIG_INI_DEFAULT)
+	v := viper.New()
+	v.SetConfigType("ini")
+	if err := v.ReadConfig(sr); err != nil {
+		log.Fatal().Err(err).Msg("load default configs error.")
 	}
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "-"))
-	viper.AutomaticEnv()
-	ParseBaseURL()
-	printConfig()
+	for _, name := range v.AllKeys() {
+		viper.SetDefault(name, v.Get(name))
+	}
+
 }
 
 func LoadConfigByFile(filename string, isDefault bool) {
@@ -59,6 +61,7 @@ func ParseBaseURL() {
 
 func printConfig() {
 	for _, k := range viper.AllKeys() {
+
 		log.Debug().Msgf("Config: %s => %v", k, viper.Get(k))
 	}
 }

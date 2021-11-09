@@ -38,7 +38,7 @@ export PATH=$PATH:$GOPATH/bin
 // StartFiberServer(route.Init)
 ```
 
-2. file: `./internal/route/route.go`
+2. file: `./route/route.go`
 
 ```
 // // ---- Plaase Uncommant ----
@@ -49,24 +49,12 @@ export PATH=$PATH:$GOPATH/bin
 // }
 ```
 
-### Config Default file: `default.yml`
-
-```yaml
-app:
-  dev: false
-  baseurl: https://example.com/api/v2
-auth:
-  basic: user:pass
-db:
-  mysql:
-    -
-```
-
 ### Config With `ENV`
 
 ```dotenv
-APP__DEV=true
-APP__BASEURL=https://example.com/api/v2
+APP.DEV=false
+APP.BASEURL=https://${DOMAIN}:${PORT}/${PREFIX}
+APP.PORT=${PORT}
 
 ```
 

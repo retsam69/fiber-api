@@ -19,13 +19,15 @@ SERVICE_NAME=docker_service_name
 dev:
 	go run ${LDFLAGS} main.go -c dev.yaml
 
- swagger: swag2openapi
+ swagger: 
 	rm -rf ./docs
 	swag init --parseInternal --generatedTime
+	make swag2openapi
 
-swagger-prd: swag2openapi
+swagger-prd:
 	rm -rf ./docs
 	swag init --parseInternal --generatedTime -g main.go-prd
+	make swag2openapi
 
 swag2openapi:
 	rm -rf ./docs/docs.go
