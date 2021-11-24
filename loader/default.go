@@ -1,4 +1,4 @@
-package cmd_api
+package loader
 
 var CONFIG_INI_DEFAULT string = `
 [app]

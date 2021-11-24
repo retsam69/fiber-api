@@ -40,7 +40,7 @@ func main() {
 
 	// ---- Plaase Uncommant ----
 	// // load config or etc.
-	// cmd_api.Init()
+	// loader.Init()
 	// // start http server
-	// cmd_api.StartFiberServer(route.Init)
+	// loader.StartFiberServer(route.Init)
 }

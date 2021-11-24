@@ -7,9 +7,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-
-	"github.com/attapon-th/phuslulogger"
-	"github.com/phuslu/log"
 )
 
 const (
@@ -22,42 +19,44 @@ var (
 	Lines    []string
 )
 
-func init() {
-	log.DefaultLogger = phuslulogger.GetLoggerConsole(0, 1)
-}
-
 func main() {
-	log.Info().Str("Name", AppName).Str("Description", AppnDescription).Msg("")
 	cmd := ""
 	if len(os.Args) > 1 {
 		cmd = os.Args[1]
 	}
 	Readlines(makefile)
-	switch cmd {
-	case "h":
-		help()
-	case "i":
-		IncrementVersion()
-		WriteLines(makefile)
-	case "b":
-		// _, oldBuild := GetName("build")
-		b := GitBuild()
-		SetName("build", b)
-		WriteLines(makefile)
-	case "v":
-		_, l := GetVersion()
-		log.Info().Msgf("Version: %s", l)
-	default:
-		help()
+	for _, c := range cmd {
+		switch c {
+		case 'h':
+			help()
+			return
+		case 'i':
+			IncrementVersion()
+			WriteLines(makefile)
+		case 'b':
+			// _, oldBuild := GetName("build")
+			b := GitBuild()
+			SetName("build", b)
+			WriteLines(makefile)
+		case 'v':
+			_, l := GetVersion()
+			b := GitBuild()
+			fmt.Printf("Version: %s\nBuild:%s\n", l, b)
+		default:
+			help()
 
+		}
 	}
 }
 
 func help() {
-	log.Info().Str("command", "h").Msg("Help")
-	log.Info().Str("command", "v").Msg("Show version")
-	log.Info().Str("command", "i").Msg("Increment minor version")
-	log.Info().Str("command", "b").Msg("Build hash")
+	h := `Helper:
+	h	-	Show Help
+	v	-	Show Info
+	i	-	Increment minor Version
+	b	-	Set Build Hash
+`
+	fmt.Println(h)
 }
 
 func GetName(name string) (int, string) {
@@ -78,14 +77,15 @@ func SetName(name, value string) {
 	}
 	value = strings.TrimRight(value, "\n")
 	Lines[i] = fmt.Sprintf("%s=%s", name, value)
-	log.Info().Str(name, value).Msgf("updated")
+	fmt.Printf("Set %s: %s\n", name, value)
 }
 
 func OutputCmd(name string, cmd ...string) string {
 	c := exec.Command(name, cmd...)
 	s, err := c.Output()
 	if err != nil {
-		log.Fatal().Err(err).Msg("")
+		fmt.Printf("Error: %s\n", err.Error())
+		os.Exit(1)
 	}
 	return string(s)
 }
@@ -98,7 +98,8 @@ func Readlines(filename string) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal().Err(err).Msg("")
+		fmt.Printf("Error: %s\n", err.Error())
+		return
 	}
 	defer file.Close()
 
@@ -108,19 +109,21 @@ func Readlines(filename string) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal().Err(err).Msg("")
+		fmt.Printf("Error: %s\n", err.Error())
+		os.Exit(1)
 	}
 }
 
 func WriteLines(filename string) {
 	file, err := os.OpenFile(filename, os.O_WRONLY, os.ModePerm)
 	if err != nil {
-		log.Fatal().Err(err).Msg("")
+		fmt.Printf("Error: %s\n", err.Error())
+		os.Exit(1)
 	}
 	defer file.Close()
 	for i, l := range Lines {
 		if _, err = file.WriteString(fmt.Sprintf("%s\n", l)); err != nil {
-			log.Error().Int("index", i).Err(err).Msg("")
+			fmt.Errorf("Error Line: %d, String: %s, Error: %s", i, l, err.Error())
 		}
 	}
 
@@ -141,7 +144,7 @@ func SetVersion(version string) {
 		return
 	}
 	Lines[i] = fmt.Sprintf("VERSION=%s", version)
-	log.Info().Str("VERSION", version).Msg("updated")
+	fmt.Println("VERSION: ", version)
 }
 
 func IncrementVersion() {
@@ -149,17 +152,18 @@ func IncrementVersion() {
 	if i < 0 {
 		return
 	}
-	log.Info().Str("VERSION", v).Msg("older")
+	fmt.Println("Old VERSION: ", v)
 	sp := strings.Split(v, ".")
 	if len(sp) <= 0 {
 		return
 	}
 	if MinorVersion, err := strconv.ParseInt(sp[len(sp)-1], 10, 64); err != nil {
-		log.Error().Err(err).Msg("")
+		fmt.Printf("Error: %s\n", err.Error())
+		os.Exit(1)
 	} else {
 		MinorVersion++
 		sp[len(sp)-1] = fmt.Sprint(MinorVersion)
 	}
 	Lines[i] = fmt.Sprintf("VERSION=%s", strings.Join(sp, "."))
-	log.Info().Str("VERSION", strings.Join(sp, ".")).Msg("updated")
+	fmt.Println("New VERSION: ", strings.Join(sp, "."))
 }

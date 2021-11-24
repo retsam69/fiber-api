@@ -1,7 +1,7 @@
 .PHONY: all
 BINARY=AppMain
-VERSION=0.0.0
-BUILD=
+VERSION=0.0.1
+BUILD=faa91d431795e148ca10c3f6613000921a57dec2
 
 # go main file
 GOMAINFILE=main.go

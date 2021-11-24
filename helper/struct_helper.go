@@ -5,44 +5,41 @@ import (
 	"strings"
 )
 
-func GetTagInStruct(s interface{}, tag_name string) map[string]string {
+type StructTagDetail struct {
+	Index     int
+	FielName  string
+	TagName   string
+	TagOption string
+}
+
+func GetTagInStruct(s interface{}, tag_name string) []StructTagDetail {
 	st := reflect.TypeOf(s)
-	tags := make(map[string]string)
+	tags := []StructTagDetail{}
 	for i := 0; i < st.NumField(); i++ {
 		field := st.Field(i)
+		tag := StructTagDetail{Index: i, FielName: field.Name}
 		switch tag_name {
 		case "gorm":
-			tags[field.Name] = ParseTagGORM(field)
-		case "json":
-			tags[field.Name] = ParseTagJson(field)
+			tag.TagName, tag.TagOption = parseTagGORM(field)
 		default:
-			tags[field.Name] = ParseTagDefault(field, tag_name)
+			tag.TagName, tag.TagOption = parseTagDefault(field, tag_name)
 		}
 	}
 	return tags
 }
 
-func ParseTagDefault(field reflect.StructField, tag_name string) string {
+func parseTagDefault(field reflect.StructField, tag_name string) (string, string) {
 	if tag, ok := field.Tag.Lookup(tag_name); ok {
-		if idx := strings.Index(tag, ","); idx != -1 {
-			return tag[:idx]
+		if idx := strings.SplitN(tag, ",", 1); len(idx) > 1 {
+			return idx[0], idx[1]
 		} else {
-			return tag
+			return idx[0], ""
 		}
 	}
-	return ToSnakeCase(field.Name)
+	return ToSnakeCase(field.Name), ""
 }
 
-func ParseTagJson(field reflect.StructField) string {
-	if tag, ok := field.Tag.Lookup("json"); ok {
-		if idx := strings.Index(tag, ","); idx != -1 {
-			return tag[:idx]
-		}
-	}
-	return ToSnakeCase(field.Name)
-}
-
-func ParseTagGORM(field reflect.StructField) string {
+func parseTagGORM(field reflect.StructField) (string, string) {
 	sep := ";"
 	if tag, ok := field.Tag.Lookup("gorm"); ok {
 		names := strings.Split(tag, sep)
@@ -63,10 +60,10 @@ func ParseTagGORM(field reflect.StructField) string {
 			k := strings.TrimSpace(strings.ToUpper(values[0]))
 			if k == "COLUMN" {
 				if len(values) >= 2 {
-					return values[1]
+					return values[1], tag
 				}
 			}
 		}
 	}
-	return ToSnakeCase(field.Name)
+	return ToSnakeCase(field.Name), ""
 }
