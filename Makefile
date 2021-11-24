@@ -7,7 +7,7 @@ BUILD=faa91d431795e148ca10c3f6613000921a57dec2
 GOMAINFILE=main.go
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
-GIT_REGISTRY_URL="registry.${GO_MODULE}"
+GIT_REGISTRY_URL=registry.${GO_MODULE}
 
 SSH_NAME=ssh_name
 SERVICE_NAME=docker_service_name
