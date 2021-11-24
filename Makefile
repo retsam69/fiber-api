@@ -46,15 +46,10 @@ mod:
 	go mod tidy
 	go mod vendor
 
-git:
-	git cpush
-
-version-up:
-	gmf i
-	gmf b
-	gmf v
-
-docker-build: version-up git
+docker-build:
+	gmf ibv
+	-git add .
+	-git cpush
 	make swagger-prd
 	docker build \
 	-t ${GIT_REGISTRY_URL}:latest .
