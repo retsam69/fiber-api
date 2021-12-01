@@ -1,7 +1,7 @@
 ############################
 # STEP 1 build executable binary
 ############################
-FROM golang:alpine  as builder
+FROM golang:1.17-alpine  as builder
 # install package for build
 RUN apk -U --no-cache add \
     build-base git gcc bash tzdata git make ca-certificates \
