@@ -9,6 +9,11 @@ cd __YOUR_PROJECT__
 
 git clone https://gitlab.com/indev-moph/fiber-api.git .
 ./init.sh
+
+# OR clone with ssh
+git clone git@gitlab.com/indev-moph/fiber-api.git .
+./init.sh
+
 ```
 
 ## Set `go/bin` path in `$PATH` Envolopment if your not set

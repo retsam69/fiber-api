@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  ${SERVICE}:
+    image: ${IMAGE}:latest 
+    environment:
+      - TZ=Asia/Bangkok
+      - APP.DEV=false
+      - APP.BASEURL=https://${DOMAIN}/${PREFIX}
+      - APP.PORT=80
+      - AUTH.BASIC.ADMIN=indev@moph
+      - AUTH.BASIC.PSUUSER=tz66ETaqybkjrF3Qkk8sM
+    volumes:
+      - ${SERVICE}_log:/app/logs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.tls=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=websecure"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${DOMAIN}`) && PathPrefix(`${PREFIX}`)"
+      - "traefik.http.services.${SERVICE}.loadbalancer.server.port=80"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
+
+volumes:
+  ${SERVICE}_log:

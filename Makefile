@@ -70,7 +70,6 @@ move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
 	mkdir -p /app/docs
 	mv docs/openapi-${VERSION}.json /app/docs/openapi-${VERSION}.json
-	mv default.yml /app/default.yaml
 
 
 server-up:
