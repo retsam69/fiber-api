@@ -16,6 +16,7 @@ func Init() {
 
 // @Summary
 // @Description
+// @Tags      General
 // @Success   200      {string}  string  status
 // @Failure   default  {string}  string
 // @security  BasicAuth
