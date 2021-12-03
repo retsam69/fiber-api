@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
+	"gitlab.com/indev-moph/fiber-api/controller"
+	"gitlab.com/indev-moph/fiber-api/loader"
+	"gitlab.com/indev-moph/fiber-api/route"
 )
 
 const (
@@ -20,16 +23,16 @@ var (
 	ConfigFile = pflag.StringP("config", "c", "", "config file path")
 )
 
-// @title API
-// @version 1
-// @description API Service
+// @title        API
+// @version      1
+// @description  API Service
 // @contact.name
 // @contact.url
 // @contact.email
-// @host localhost:8888
-// @schemes http https
-// @BasePath /api
-// @securityDefinitions.basic BasicAuth
+// @host                       localhost:8888
+// @schemes                    http https
+// @BasePath                   /api
+// @securityDefinitions.basic  BasicAuth
 func main() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
 	logger.SetDefaultlogger()
@@ -39,8 +42,12 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// ---- Plaase Uncommant ----
-	// // load config or etc.
-	// loader.Init()
-	// // start http server
-	// loader.StartFiberServer(route.Init)
+	// load config or etc.
+	loader.Init()
+
+	// start http server
+	controller.Init()
+	route.RegisRoutes = &controller.RegisRoutes
+	loader.StartFiberServer(route.Init)
+
 }

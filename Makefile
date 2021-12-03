@@ -13,9 +13,10 @@ SSH_NAME=ssh_name
 SERVICE_NAME=docker_service_name
 
 dev:
-	go run ${LDFLAGS} main.go -c dev.yaml
+	go run ${LDFLAGS} main.go -c dev.env
 
 swagger: 
+	swag fmt
 	rm -rf ./docs
 	swag init --parseInternal --generatedTime
 	make swag2openapi
