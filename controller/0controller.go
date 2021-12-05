@@ -1,6 +1,9 @@
 package controller
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/phuslu/log"
+)
 
 var (
 	RegisRoutes []func(fiber.Router)
@@ -10,8 +13,9 @@ func init() {
 	RegisRoutes = append(RegisRoutes, EndpointPing)
 }
 
-func Init() {
-
+func Init() []func(fiber.Router) {
+	log.Info().Msg("Init Controller")
+	return RegisRoutes
 }
 
 // @Summary

@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	logger "github.com/attapon-th/phuslulogger"
+	"github.com/gofiber/fiber/v2"
+	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
-	"gitlab.com/indev-moph/fiber-api/controller"
 	"gitlab.com/indev-moph/fiber-api/loader"
-	"gitlab.com/indev-moph/fiber-api/route"
 )
 
 const (
@@ -30,7 +30,7 @@ var (
 // @contact.url
 // @contact.email
 // @host                       localhost:8888
-// @schemes                    http https
+// @schemes                    http
 // @BasePath                   /api
 // @securityDefinitions.basic  BasicAuth
 func main() {
@@ -46,8 +46,27 @@ func main() {
 	loader.Init()
 
 	// start http server
-	controller.Init()
-	route.RegisRoutes = &controller.RegisRoutes
-	loader.StartFiberServer(route.Init)
+	// Serv(controller.Init, route.Init) // <---- Uncommend Line
+}
 
+func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
+	fConfig := fiber.Config{}
+	_ = viper.UnmarshalKey("fiber", &fConfig)
+	// production mode
+	if !viper.GetBool("app.dev") {
+		fConfig.DisableStartupMessage = true
+		loader.SetLoggerProduction()
+	}
+
+	app := fiber.New(fConfig)
+	var RegisRoutes = ctl()
+	rt(app, RegisRoutes...)
+
+	log.Info().Msg("start server listener...")
+	// Start Server Listener
+	ServerLister := fmt.Sprintf("%s:%s", viper.GetString("app.listen"), viper.GetString("app.port"))
+	log.Info().Msgf("Server listener: %s", ServerLister)
+	if err := app.Listen(ServerLister); err != nil {
+		log.Fatal().Err(err).Msg("")
+	}
 }

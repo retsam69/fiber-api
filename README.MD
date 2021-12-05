@@ -8,11 +8,11 @@
 cd __YOUR_PROJECT__
 
 git clone https://gitlab.com/indev-moph/fiber-api.git .
-./init.sh
+&& ./init.sh
 
 # OR clone with ssh
 git clone git@gitlab.com/indev-moph/fiber-api.git .
-./init.sh
+&& ./init.sh
 
 ```
 
@@ -35,24 +35,24 @@ export PATH=$PATH:$GOPATH/bin
 
 1. file: `main.go`
 
-```
-// ---- Plaase Uncommant ----
-// // load config or etc.
-// cmd_api.Init()
-// // start http server
-// StartFiberServer(route.Init)
+```go
+func main() {
+	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
+	logger.SetDefaultlogger()
+	viper.SetDefault("version", Version)
+	viper.SetDefault("build", Build)
+	pflag.Parse()
+	_ = viper.BindPFlags(pflag.CommandLine)
+
+	// ---- Plaase Uncommant ----
+	// load config or etc.
+	loader.Init()
+
+	// start http server
+	// Serv(controller.Init, route.Init) // <---- Uncommend Line
+}
 ```
 
-2. file: `./route/route.go`
-
-```
-// // ---- Plaase Uncommant ----
-// rg := app.Group(UrlPrefix)
-// for i, v := range controller.RegisRoutes {
-// 	log.Info().Msgf("Registor Endpoint: %d", i+1)
-// 	v(rg)
-// }
-```
 
 ### Config With `ENV`
 

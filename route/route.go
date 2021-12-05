@@ -7,11 +7,10 @@ import (
 )
 
 var (
-	UrlPrefix   string
-	RegisRoutes *[]func(fiber.Router)
+	UrlPrefix string
 )
 
-func Init(app fiber.Router) {
+func Init(app fiber.Router, RegisRoutes ...func(fiber.Router)) {
 
 	// Set Url Prefix in ENV: APP_Prefix
 	UrlPrefix = viper.GetString("app.prefix")
@@ -24,7 +23,7 @@ func Init(app fiber.Router) {
 	)
 
 	rg := app.Group(UrlPrefix, BasicAuth())
-	for i, v := range *RegisRoutes {
+	for i, v := range RegisRoutes {
 		log.Info().Msgf("Registor Endpoint: %d", i+1)
 		v(rg)
 	}
