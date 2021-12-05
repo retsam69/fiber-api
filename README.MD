@@ -44,11 +44,8 @@ func main() {
 	pflag.Parse()
 	_ = viper.BindPFlags(pflag.CommandLine)
 
-	// ---- Plaase Uncommant ----
-	// load config or etc.
-	loader.Init()
-
-	// start http server
+	// // ---- Plaase Uncommant ----
+	// loader.Init()                     // <---- Uncommend Line
 	// Serv(controller.Init, route.Init) // <---- Uncommend Line
 }
 ```

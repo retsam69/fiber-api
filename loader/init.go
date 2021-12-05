@@ -11,4 +11,9 @@ func Init() {
 	viper.AutomaticEnv()
 	ParseBaseURL()
 	printConfig()
+
+	if !viper.GetBool("app.dev") {
+		SetLoggerProduction()
+	}
+
 }

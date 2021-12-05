@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
-	"gitlab.com/indev-moph/fiber-api/loader"
 )
 
 const (
@@ -41,11 +40,8 @@ func main() {
 	pflag.Parse()
 	_ = viper.BindPFlags(pflag.CommandLine)
 
-	// ---- Plaase Uncommant ----
-	// load config or etc.
-	loader.Init()
-
-	// start http server
+	// // ---- Plaase Uncommant ----
+	// loader.Init()                     // <---- Uncommend Line
 	// Serv(controller.Init, route.Init) // <---- Uncommend Line
 }
 
@@ -55,7 +51,6 @@ func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.R
 	// production mode
 	if !viper.GetBool("app.dev") {
 		fConfig.DisableStartupMessage = true
-		loader.SetLoggerProduction()
 	}
 
 	app := fiber.New(fConfig)
