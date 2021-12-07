@@ -11,16 +11,17 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-
 	// "github.com/gofiber/fiber/v2/middleware/compress"
 	// "github.com/gofiber/fiber/v2/middleware/cache"
-	"github.com/gofiber/fiber/v2/middleware/timeout"
+	// "github.com/gofiber/fiber/v2/middleware/timeout"
 )
 
+// * ░▒▓█►─═ Middleware CORS ═─►█▓▒░
 func CORS() fiber.Handler {
 	return cors.New()
 }
 
+// * ░▒▓█►─═ Middleware Http Basic Auth ═─►█▓▒░
 func BasicAuth() fiber.Handler {
 	users := viper.GetString("auth.basic")
 	var u = make(map[string]string)
@@ -37,6 +38,7 @@ func BasicAuth() fiber.Handler {
 	})
 }
 
+// * ░▒▓█►─═ Middleware Log Access ═─►█▓▒░
 func LoggerAccess() fiber.Handler {
 	return mlogger.New(mlogger.Config{
 		Format:       "${time} - [${pid}][${latency}][${method}][${status}] ${url}\n",
@@ -65,4 +67,4 @@ func LoggerAccess() fiber.Handler {
 // }
 
 // * ░▒▓█►─═ Middleware Timeout ═─►█▓▒░
-var SetTimeout = timeout.New
+// var SetTimeout = timeout.New

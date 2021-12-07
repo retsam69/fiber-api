@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	logger "github.com/attapon-th/phuslulogger"
@@ -9,10 +10,6 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
-)
-
-const (
-	ENV_PREFIX = "APP"
 )
 
 var (
@@ -46,7 +43,14 @@ func main() {
 }
 
 func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
-	fConfig := fiber.Config{}
+	fConfig := fiber.Config{
+		Prefork:       true,
+		CaseSensitive: true,
+		AppName:       AppName,
+		JSONEncoder:   json.Marshal,
+		JSONDecoder:   json.Unmarshal,
+		// ErrorHandler:  loader.FiberErrorHandler,
+	}
 	_ = viper.UnmarshalKey("fiber", &fConfig)
 	// production mode
 	if !viper.GetBool("app.dev") {

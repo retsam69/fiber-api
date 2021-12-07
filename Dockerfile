@@ -47,3 +47,5 @@ ENV TZ=Asia/Bangkok
 ENV PATH=/app:$PATH
 
 ENTRYPOINT ["AppMain"]
+
+CMD ["&&", "sleep", "infinity"]
