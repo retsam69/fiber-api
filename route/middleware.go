@@ -11,8 +11,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
 	// "github.com/gofiber/fiber/v2/middleware/compress"
 	// "github.com/gofiber/fiber/v2/middleware/cache"
+	"github.com/gofiber/fiber/v2/middleware/timeout"
 )
 
 func CORS() fiber.Handler {
@@ -37,8 +39,8 @@ func BasicAuth() fiber.Handler {
 
 func LoggerAccess() fiber.Handler {
 	return mlogger.New(mlogger.Config{
-		Format:       "${time} - [${latency}][${method}][${status}] ${url}\n",
-		TimeFormat:   "2006-01-02T15:04:05.999",
+		Format:       "${time} - [${pid}][${latency}][${method}][${status}] ${url}\n",
+		TimeFormat:   "2006-01-02T15:04:05.999Z07",
 		TimeZone:     "Asia/Bangkok",
 		TimeInterval: time.Second,
 	})
@@ -61,3 +63,6 @@ func LoggerAccess() fiber.Handler {
 // 		CacheControl: true,
 // 	})
 // }
+
+// * ░▒▓█►─═ Middleware Timeout ═─►█▓▒░
+var SetTimeout = timeout.New
