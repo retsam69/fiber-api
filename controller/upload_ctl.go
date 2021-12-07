@@ -84,7 +84,7 @@ package controller
 // // @Success   200      {string}  string
 // // @Failure   default  {string}  string
 // // @security  BasicAuth
-// // @Router    /ul/{dl} [get]
+// // @Router    /ul/dl [get]
 // func DownloadFile(c *fiber.Ctx) error {
 // 	fdl := c.Query("f", ".emptyfile")
 // 	filename := path.Join(DIR_STORAGE, fdl)

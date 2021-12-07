@@ -2,6 +2,10 @@ package loader
 
 import "github.com/spf13/viper"
 
+var (
+	Dev bool = false
+)
+
 func Init() {
 	loadDefaultConfig()
 	if fileConfig := viper.GetString("config"); fileConfig != "" {
@@ -13,7 +17,10 @@ func Init() {
 	printConfig()
 
 	if !viper.GetBool("app.dev") {
+		Dev = false
 		SetLoggerProduction()
+	} else {
+		Dev = true
 	}
 
 }

@@ -1,11 +1,9 @@
 package route
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
-	rapidoc "github.com/attapon-th/gofiber-rapidoc"
 	mlogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/phuslu/log"
 	"github.com/spf13/viper"
@@ -13,20 +11,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	// "github.com/gofiber/fiber/v2/middleware/compress"
+	// "github.com/gofiber/fiber/v2/middleware/cache"
 )
 
 func CORS() fiber.Handler {
 	return cors.New()
 }
 
-// "github.com/gofiber/fiber/v2/middleware/compress"
-// func Compress() fiber.Handler {
-// 	return compress.New(compress.Config{
-// 		Level: compress.LevelBestSpeed,
-// 	})
-// }
-
-// "github.com/gofiber/fiber/v2/middleware/basicauth"
 func BasicAuth() fiber.Handler {
 	users := viper.GetString("auth.basic")
 	var u = make(map[string]string)
@@ -52,16 +44,20 @@ func LoggerAccess() fiber.Handler {
 	})
 }
 
-func EndpointSwagger(r fiber.Router) {
-	UrlPrefix := fmt.Sprintf("%s/swagger", viper.GetString("app.prefix"))
-	UrlSwaggerFile := fmt.Sprintf("%s/docs/openapi-%s.json", UrlPrefix, viper.GetString("version"))
-	r.Get(UrlPrefix+"/*", rapidoc.New(rapidoc.Config{
-		Title:       "Service API",
-		HeaderText:  "Service API",
-		RenderStyle: rapidoc.RenderStyle_View,
-		SchemaStyle: rapidoc.SchemaStyle_Table,
-		SpecURL:     UrlSwaggerFile,
-		LogoURL:     `https://cdn-icons-png.flaticon.com/512/2165/2165004.png`,
-	}))
+// * ░▒▓█►─═ Middleware Compress ═─►█▓▒░
+// func Compress() fiber.Handler {
+// 	return compress.New(compress.Config{
+// 		Level: compress.LevelBestSpeed,
+// 	})
+// }
 
-}
+// * ░▒▓█►─═ Middleware Cache ═─►█▓▒░
+// func FiberCache() fiber.Handler {
+// 	return cache.New(cache.Config{
+// 		Next: func(c *fiber.Ctx) bool {
+// 			return c.Query("cache") == "false"
+// 		},
+// 		Expiration:   30 * time.Minute,
+// 		CacheControl: true,
+// 	})
+// }
