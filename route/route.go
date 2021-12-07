@@ -14,15 +14,18 @@ func Init(app fiber.Router, RegisRoutes ...func(fiber.Router)) {
 
 	// Set Url Prefix in ENV: APP_Prefix
 	UrlPrefix = viper.GetString("app.prefix")
+	UrlPrefix = viper.GetString("app.prefix")
+	basicAuth := BasicAuth()
 
-	EndpointSwagger(app)
+	EndpointSwagger(app, UrlPrefix+"/swagger")
+	EndpointMonitor(app, UrlPrefix+"/dashboard")
 
-	app.Use(UrlPrefix+"/",
+	rg := app.Group(UrlPrefix,
 		CORS(),
 		LoggerAccess(),
+		basicAuth,
 	)
 
-	rg := app.Group(UrlPrefix, BasicAuth())
 	for i, v := range RegisRoutes {
 		log.Info().Msgf("Registor Endpoint: %d", i+1)
 		v(rg)

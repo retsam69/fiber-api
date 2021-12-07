@@ -38,11 +38,9 @@ func FiberErrorHandler(c *fiber.Ctx, err error) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 
 	return c.Status(code).JSON(APIError{
-		APIResponse: APIResponse{
-			IsError: true,
-			Msg:     err.Error(),
-		},
-		Detail: nil,
+		IsError: true,
+		Msg:     err.Error(),
+		Detail:  nil,
 	})
 
 }

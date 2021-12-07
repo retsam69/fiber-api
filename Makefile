@@ -9,11 +9,8 @@ LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
 GIT_REGISTRY_URL=registry.${GO_MODULE}
 
-SSH_NAME=ssh_name
-SERVICE_NAME=docker_service_name
-
 dev:
-	go run ${LDFLAGS} main.go -c dev.env
+	go run ${LDFLAGS} main.go -c dev.ini
 
 swagger: 
 	swag fmt
@@ -73,7 +70,18 @@ move-in-docker:
 	mv docs/openapi-${VERSION}.json /app/docs/openapi-${VERSION}.json
 
 
+SSH_NAME=ssh_name
+REMOTE_PATH=/home/attapon/
+
+
+SSH_NAME=ssh_config_name
+REMOTE_PATH=/home/attapon/${BINARY}
+server-sync:
+	ssh ${SSH_NAME} "mkdir -p ${REMOTE_PATH}/logs"
+	scp deployments/docker-compose.yml ${SSH_NAME}:${REMOTE_PATH}/docker-compose.yml
+
 server-up:
 	@echo "Server Up ${SSH_NAME}"
-	ssh ${SSH_NAME} "docker pull ${GIT_REGISTRY_URL}:latest; \
-	docker service update --force ${SERVICE_NAME};"
+	ssh ${SSH_NAME} "cd ${REMOTE_PATH}; \
+	docker-compose pull; \
+	docker-compose up -d && docker-compose logs -f"

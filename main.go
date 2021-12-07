@@ -44,7 +44,6 @@ func main() {
 
 func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
 	fConfig := fiber.Config{
-		Prefork:       true,
 		CaseSensitive: true,
 		AppName:       AppName,
 		JSONEncoder:   json.Marshal,
@@ -55,6 +54,7 @@ func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.R
 	// production mode
 	if !viper.GetBool("app.dev") {
 		fConfig.DisableStartupMessage = true
+		fConfig.Prefork = true
 	}
 
 	app := fiber.New(fConfig)
