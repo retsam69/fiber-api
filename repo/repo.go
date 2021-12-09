@@ -12,17 +12,18 @@ package repo
 // 	return dbDefault
 // }
 
-// func SetDB(dsn string) {
-// 	myDial := mysql.Open(dsn)
+// func SetDB(dsn string) *gorm.DB {
+// 	myDial := sqlite.Open(dsn)
 // 	db, err := gorm.Open(myDial, &gorm.Config{})
 // 	if err != nil {
 // 		log.Fatal().Err(err).Msgf("Error Connect %s, Dsn: %s", myDial.Name(), dsn)
 // 	}
-// 	if loader.Dev {
+// 	if viper.GetBool("app.dev") {
 // 		dbDefault = db.Debug()
 // 	} else {
 // 		dbDefault = db
 // 	}
+// 	return dbDefault
 // }
 
 // func Migrator(db *gorm.DB, dst ...interface{}) {
