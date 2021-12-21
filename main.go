@@ -11,9 +11,6 @@ import (
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"gitlab.com/indev-moph/fiber-api/controller"
-	"gitlab.com/indev-moph/fiber-api/loader"
-	"gitlab.com/indev-moph/fiber-api/route"
 )
 
 var (
@@ -42,8 +39,8 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// // ---- Plaase Uncommant ----
-	loader.Init()                     // <---- Uncommant Line
-	Serv(controller.Init, route.Init) // <---- Uncommant Line
+	// loader.Init()                     // <---- Uncommant Line
+	// Serv(controller.Init, route.Init) // <---- Uncommant Line
 }
 
 func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {

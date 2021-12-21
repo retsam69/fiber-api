@@ -25,6 +25,7 @@ RUN mkdir -p /app
 
 ARG BUILDDOCKER
 # build go file
+# Set build && move in `Makefile`
 RUN make build-in-docker move-in-docker
 
 ############################
