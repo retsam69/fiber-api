@@ -9,9 +9,9 @@ import (
 )
 
 func loadDefaultConfig() {
-	sr := strings.NewReader(CONFIG_INI_DEFAULT)
+	sr := strings.NewReader(CONFIG_DEFAULT)
 	v := viper.New()
-	v.SetConfigType("ini")
+	v.SetConfigType(TYPE_CONFIG_DEFAULT)
 	if err := v.ReadConfig(sr); err != nil {
 		log.Fatal().Err(err).Msg("load default configs error.")
 	}
@@ -42,9 +42,10 @@ func ParseBaseURL() {
 	if u, err := url.Parse(viper.GetString("app.baseurl")); err != nil {
 		log.Fatal().Err(err).Msgf("error: app.baseurl")
 	} else {
+		// log.Debug().Str("port", u.Port()).Msg("")
 		viper.SetDefault("app.hostname", u.Hostname())
-		if u.Port() == "" {
-			viper.SetDefault("app.port", 80)
+		if u.Port() == "" || u.Port() == "0" {
+			viper.SetDefault("app.port", "80")
 		} else {
 			viper.SetDefault("app.port", u.Port())
 		}
@@ -61,7 +62,6 @@ func ParseBaseURL() {
 
 func printConfig() {
 	for _, k := range viper.AllKeys() {
-
 		log.Debug().Msgf("Config: %s => %v", k, viper.Get(k))
 	}
 }

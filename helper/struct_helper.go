@@ -3,7 +3,7 @@ package helper
 import (
 	"reflect"
 	"strings"
-	// "github.com/leebenson/conform" // trim data struct
+	// 	"github.com/leebenson/conform" // trim data struct
 )
 
 type StructTagDetail struct {

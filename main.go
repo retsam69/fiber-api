@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 
 	logger "github.com/attapon-th/phuslulogger"
 	"github.com/gofiber/fiber/v2"
@@ -27,9 +29,9 @@ var (
 // @contact.name
 // @contact.url
 // @contact.email
-// @host                       localhost:8888
 // @schemes                    http
-// @BasePath                   /api
+// @host                       localhost:8888
+// @BasePath                   /
 // @securityDefinitions.basic  BasicAuth
 func main() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
@@ -40,23 +42,28 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// // ---- Plaase Uncommant ----
-	loader.Init()                     // <---- Uncommend Line
-	Serv(controller.Init, route.Init) // <---- Uncommend Line
+	loader.Init()                     // <---- Uncommant Line
+	Serv(controller.Init, route.Init) // <---- Uncommant Line
 }
 
 func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	fConfig := fiber.Config{
-		CaseSensitive: true,
 		AppName:       AppName,
 		JSONEncoder:   json.Marshal,
 		JSONDecoder:   json.Unmarshal,
+		Prefork:       true,
+		CaseSensitive: true,
+		StrictRouting: true,
+		ServerHeader:  "Fiber",
+
+		// * Set ErrorHandler is response json
 		// ErrorHandler:  loader.FiberErrorHandler,
 	}
 	_ = viper.UnmarshalKey("fiber", &fConfig)
 	// production mode
 	if !viper.GetBool("app.dev") {
-		fConfig.DisableStartupMessage = true
+		// fConfig.DisableStartupMessage = true
 		fConfig.Prefork = true
 	}
 
@@ -64,7 +71,12 @@ func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.R
 	var RegisRoutes = ctl()
 	rt(app, RegisRoutes...)
 
-	log.Info().Msg("start server listener...")
+	runtime.GOMAXPROCS(viper.GetInt("app.maxprocs"))
+	if !fiber.IsChild() {
+		log.Info().Msg("Parent process")
+	} else {
+		log.Info().Msgf("Child process pid: %d", os.Getpid())
+	}
 	// Start Server Listener
 	ServerLister := fmt.Sprintf("%s:%s", viper.GetString("app.listen"), viper.GetString("app.port"))
 	log.Info().Msgf("Server listener: %s", ServerLister)

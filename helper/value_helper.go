@@ -39,7 +39,6 @@ func ToSnakeCase(s string) string {
 		} else {
 			res = append(res, unicode.ToLower(r))
 		}
-
 		p = r
 	}
 	return string(res)

@@ -51,12 +51,18 @@ func main() {
 ```
 
 
-### Config With `ENV`
+### Config (type: dotenv)
 
 ```dotenv
+# run mode is `Devolopment`
 APP.DEV=false
-APP.BASEURL=https://${DOMAIN}:${PORT}/${PREFIX}
-APP.PORT=${PORT}
+APP.MAXPROCES=2  #max child process (default: 2)
+APP.BASEURL=http://localhost:8888/api # listener port: 8888
+
+# ส่งออก log เป็นไฟล์ 
+LOGGER.OUTFILE=false
+LOGGER.LOG= ./logs/log.log
+LOGGER.ERROR= ./logs/error.log
 
 ```
 

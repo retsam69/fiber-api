@@ -15,7 +15,6 @@ func Init(app fiber.Router, RegisRoutes ...func(fiber.Router)) {
 	// Set Url Prefix in ENV: APP_Prefix
 	UrlPrefix = viper.GetString("app.prefix")
 	UrlPrefix = viper.GetString("app.prefix")
-	basicAuth := BasicAuth()
 
 	EndpointSwagger(app, UrlPrefix+"/swagger")
 	EndpointMonitor(app, UrlPrefix+"/dashboard")
@@ -23,7 +22,7 @@ func Init(app fiber.Router, RegisRoutes ...func(fiber.Router)) {
 	rg := app.Group(UrlPrefix,
 		CORS(),
 		LoggerAccess(),
-		basicAuth,
+		BasicAuth(),
 	)
 
 	for i, v := range RegisRoutes {

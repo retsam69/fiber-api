@@ -1,7 +1,6 @@
 package loader
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 )
 
@@ -21,26 +20,12 @@ func Init() {
 
 	if !viper.GetBool("app.dev") {
 		Dev = false
-		SetLoggerProduction()
 	} else {
 		Dev = true
 	}
 
-}
-
-func FiberErrorHandler(c *fiber.Ctx, err error) error {
-	code := fiber.StatusInternalServerError
-
-	if e, ok := err.(*fiber.Error); ok {
-		code = e.Code
+	if viper.GetBool("logger.outfile") {
+		SetLoggerProduction()
 	}
-	// Set Content-Type: text/plain; charset=utf-8
-	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
-
-	return c.Status(code).JSON(APIError{
-		IsError: true,
-		Msg:     err.Error(),
-		Detail:  nil,
-	})
 
 }
