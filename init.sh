@@ -8,5 +8,4 @@ read -p 'Input Go Module: ' gopack
 go mod init ${gopack}
 make mod-up
 go install ./cmd/gmf
-rm -rf cmd
 rm -f init.sh
