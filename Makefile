@@ -58,6 +58,10 @@ docker-addtags:
 docker-push:
 	docker push ${GIT_REGISTRY_URL}:latest 
 
+docker-clean:
+	# remove docker images <none>:<none>
+	-docker rmi $(docker images -f "dangling=true" -q)
+
 build-in-docker:
 	CGO_ENABLED=0 GOOS=linux go build \
 	-a -installsuffix cgo ${LDFLAGS} \
