@@ -1,15 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
 	logger "github.com/attapon-th/phuslulogger"
 	"github.com/gofiber/fiber/v2"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	_ "github.com/spf13/viper/remote"
+	"gitlab.com/indev-moph/fiber-api/controller"
+	"gitlab.com/indev-moph/fiber-api/loader"
+	"gitlab.com/indev-moph/fiber-api/route"
 )
 
 var (
@@ -38,11 +40,12 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// // ---- Plaase Uncommant ----
-	// loader.Init()                     // <---- Uncommend Line
-	// Serv(controller.Init, route.Init) // <---- Uncommend Line
+	loader.Init()                     // <---- Uncommend Line
+	Serv(controller.Init, route.Init) // <---- Uncommend Line
 }
 
 func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	fConfig := fiber.Config{
 		CaseSensitive: true,
 		AppName:       AppName,

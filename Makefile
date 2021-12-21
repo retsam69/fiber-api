@@ -1,7 +1,7 @@
 .PHONY: all
 BINARY=AppMain
-VERSION=0.0.1
-BUILD=faa91d431795e148ca10c3f6613000921a57dec2
+VERSION=0.0.2
+BUILD=15621b934aafe64e7b0040bd5df3651750abb66e
 
 # go main file
 GOMAINFILE=main.go
@@ -10,7 +10,7 @@ GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
 GIT_REGISTRY_URL=registry.${GO_MODULE}
 
 dev:
-	go run ${LDFLAGS} main.go -c dev.ini
+	go run ${LDFLAGS} main.go -c dev.env
 
 swagger: 
 	swag fmt
@@ -62,7 +62,6 @@ build-in-docker:
 	CGO_ENABLED=0 GOOS=linux go build \
 	-a -installsuffix cgo ${LDFLAGS} \
 	-o ${BINARY} ${GOMAINFILE}
-	
 	
 move-in-docker:
 	mv ${BINARY} /app/${BINARY} 
