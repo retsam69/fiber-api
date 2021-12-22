@@ -14,7 +14,11 @@ type StructTagDetail struct {
 }
 
 func GetTagInStruct(s interface{}, tag_name string) []StructTagDetail {
-	st := reflect.TypeOf(s)
+	rv := reflect.ValueOf(s)
+	for rv.Kind() == reflect.Ptr || rv.Kind() == reflect.Interface {
+		rv = rv.Elem()
+	}
+	st := rv.Type()
 	tags := []StructTagDetail{}
 	for i := 0; i < st.NumField(); i++ {
 		field := st.Field(i)
@@ -25,6 +29,7 @@ func GetTagInStruct(s interface{}, tag_name string) []StructTagDetail {
 		default:
 			tag.TagName, tag.TagOption = parseTagDefault(field, tag_name)
 		}
+		tags = append(tags, tag)
 	}
 	return tags
 }
