@@ -7,7 +7,7 @@ services:
       - APP.DEV=false
       - APP.BASEURL=https://indev.moph.go.th/activity
       - APP.PORT=80
-      - AUTH.BASIC=admin:1nDev@m0ph,jhcis:tz66ETaqybkjrF3Qkk8sM
+      - AUTH.BASIC=admin:1nDev@m0ph,user:1234
       # - "DB.MYSQL.DSN="
     volumes:
       - ${SERVICE}_log:/app/logs
