@@ -52,7 +52,7 @@ func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.R
 		Prefork:       true,
 		CaseSensitive: true,
 		StrictRouting: true,
-		ServerHeader:  "Fiber",
+		ServerHeader:  "FiberV2",
 
 		// * Set ErrorHandler is response json
 		// ErrorHandler:  loader.FiberErrorHandler,
@@ -60,15 +60,21 @@ func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.R
 	_ = viper.UnmarshalKey("fiber", &fConfig)
 	// production mode
 	if !viper.GetBool("app.dev") {
-		// fConfig.DisableStartupMessage = true
-		fConfig.Prefork = true
+
+	}
+
+	//* Set Max Process
+	maxProcess := viper.GetInt("app.maxprocs")
+	if maxProcess > 0 {
+		runtime.GOMAXPROCS(maxProcess)
+	} else if maxProcess == 0 {
+		fConfig.Prefork = false
 	}
 
 	app := fiber.New(fConfig)
 	var RegisRoutes = ctl()
 	rt(app, RegisRoutes...)
 
-	runtime.GOMAXPROCS(viper.GetInt("app.maxprocs"))
 	if !fiber.IsChild() {
 		log.Info().Msg("Parent process")
 	} else {
