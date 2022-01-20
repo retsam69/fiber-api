@@ -5,6 +5,8 @@ import (
 	"github.com/phuslu/log"
 )
 
+// ? https://github.com/attapon-th/go-valid-struct   --> Validate struct
+
 //!  For Conntroller Template
 
 func init() {
