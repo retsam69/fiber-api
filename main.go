@@ -3,21 +3,18 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	logger "github.com/attapon-th/phuslulogger"
 	"github.com/gofiber/fiber/v2"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
 var (
-	AppName    string
-	Version    string
-	Build      string
-	ConfigFile = pflag.StringP("config", "c", "", "config file path")
+	AppName string
+	Version string
+	Build   string
 )
 
 // @title        API
@@ -35,43 +32,23 @@ func main() {
 	logger.SetDefaultlogger()
 	viper.SetDefault("version", Version)
 	viper.SetDefault("build", Build)
+	_ = pflag.StringP("config", "c", "", "config file path")
 	pflag.Parse()
 	_ = viper.BindPFlags(pflag.CommandLine)
 
-	// // ---- Plaase Uncommant ----
-	// loader.Init()                     // <---- Uncommant Line
-	// Serv(controller.Init, route.Init) // <---- Uncommant Line
+	// ---- Plaase Uncommant ---- //
+	// Serv(
+	// 	loader.Init(),
+	// 	controller.Init,
+	// 	route.Init)
 }
 
-func Serv(ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	fConfig := fiber.Config{
-		AppName:       AppName,
-		JSONEncoder:   json.Marshal,
-		JSONDecoder:   json.Unmarshal,
-		Prefork:       true,
-		CaseSensitive: true,
-		StrictRouting: true,
-		ServerHeader:  "FiberV2",
-
-		// * Set ErrorHandler is response json
-		// ErrorHandler:  loader.FiberErrorHandler,
-	}
-	_ = viper.UnmarshalKey("fiber", &fConfig)
+func Serv(app *fiber.App, ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
 	// production mode
-	if !viper.GetBool("app.dev") {
+	// if !viper.GetBool("app.dev") {
 
-	}
+	// }
 
-	//* Set Max Process
-	maxProcess := viper.GetInt("app.maxprocs")
-	if maxProcess > 0 {
-		runtime.GOMAXPROCS(maxProcess)
-	} else if maxProcess == 0 {
-		fConfig.Prefork = false
-	}
-
-	app := fiber.New(fConfig)
 	var RegisRoutes = ctl()
 	rt(app, RegisRoutes...)
 

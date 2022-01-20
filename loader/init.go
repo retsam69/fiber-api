@@ -1,6 +1,7 @@
 package loader
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 )
 
@@ -8,7 +9,7 @@ var (
 	Dev bool = false
 )
 
-func Init() {
+func Init() *fiber.App {
 	loadDefaultConfig()
 	if fileConfig := viper.GetString("config"); fileConfig != "" {
 		LoadConfigByFile(fileConfig, false)
@@ -17,15 +18,12 @@ func Init() {
 	viper.AutomaticEnv()
 	ParseBaseURL()
 	printConfig()
-
-	if !viper.GetBool("app.dev") {
-		Dev = false
-	} else {
-		Dev = true
-	}
-
+	Dev = viper.GetBool("app.dev")
 	if viper.GetBool("logger.outfile") {
 		SetLoggerProduction()
 	}
 
+	InitFiber()
+
+	return FiberApp
 }

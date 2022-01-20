@@ -27,27 +27,19 @@ func init() {
 
 	RegisRoutes = append(RegisRoutes, func(r fiber.Router) {
 		log.Debug().Str("prefix", "/ul").Msg("Register Route: Upload file.")
-		r.All("/ul/:name?/*", EndpointUpload)
-	})
-}
 
-func EndpointUpload(c *fiber.Ctx) error {
-	username := c.Locals("username").(string)
-	if username != "admin" {
-		return c.SendStatus(403)
-	}
-	name := fmt.Sprintf("%s /%s", c.Method(), c.Params("name", ""))
-	switch name {
-	case "GET /list":
-		return ListFile(c)
-	case "GET /dl":
-		return DownloadFile(c)
-	case "POST /":
-		return UploadFile(c)
-	case "DELETE /":
-		return DeleteFile(c)
-	}
-	return c.SendStatus(404)
+		rg := r.Group("/uploads", func(c *fiber.Ctx) error {
+			username := c.Locals("username").(string)
+			if username != "admin" {
+				return c.SendStatus(403)
+			}
+			return c.Next()
+		})
+		rg.Get("/list", ListFile)
+		rg.Get("/dl", DownloadFile)
+		rg.Post("/", UploadFile)
+		rg.Delete("/", DeleteFile)
+	})
 }
 
 // ListFiles godoc
@@ -58,7 +50,7 @@ func EndpointUpload(c *fiber.Ctx) error {
 // @Success   200      {object}  []ListFileInfo  status
 // @Failure   default  {string}  string
 // @security  BasicAuth
-// @Router    /ul/list [get]
+// @Router    /uploads/list [get]
 func ListFile(c *fiber.Ctx) error {
 	files, err := ioutil.ReadDir(DIR_STORAGE)
 	if err != nil {
@@ -85,7 +77,7 @@ func ListFile(c *fiber.Ctx) error {
 // @Success   200      {string}  string
 // @Failure   default  {string}  string
 // @security  BasicAuth
-// @Router    /ul/dl [get]
+// @Router    /uploads/dl [get]
 func DownloadFile(c *fiber.Ctx) error {
 	fdl := c.Query("f", ".emptyfile")
 	filename := path.Join(DIR_STORAGE, fdl)
@@ -106,7 +98,7 @@ func DownloadFile(c *fiber.Ctx) error {
 // @Success   200      {string}  string
 // @Failure   default  {string}  string
 // @security  BasicAuth
-// @Router    /ul/dl [post]
+// @Router    /uploads [post]
 func UploadFile(c *fiber.Ctx) error {
 	file, err := c.FormFile("f")
 	if err != nil {
@@ -126,7 +118,7 @@ func UploadFile(c *fiber.Ctx) error {
 // @Success   200      {string}  string
 // @Failure   default  {string}  string
 // @security  BasicAuth
-// @Router    /ul/dl [delete]
+// @Router    /uploads [delete]
 func DeleteFile(c *fiber.Ctx) error {
 	fdl := c.Query("f", "")
 	filename := path.Join(DIR_STORAGE, fdl)

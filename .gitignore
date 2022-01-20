@@ -3,3 +3,4 @@
 /test
 /.bin
 /logs
+*.code-workspace
