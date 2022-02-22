@@ -1,6 +1,5 @@
-.PHONY: all
 BINARY=AppMain
-VERSION=0.0.3
+VERSION=0.0.0
 BUILD=b7f8cd0e388bed7781c313eaf58034e2ba911237
 
 # go main file
@@ -8,6 +7,8 @@ GOMAINFILE=main.go
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 GO_MODULE=`cat go.mod | grep -m1 module | sed 's/^module \(.*\)$$/\1/'`
 GIT_REGISTRY_URL=registry.${GO_MODULE}
+SSH_NAME=ssh_config_name
+REMOTE_PATH=/home/attapon/${BINARY}
 
 dev:
 	go run ${LDFLAGS} main.go -c dev.env
@@ -35,9 +36,7 @@ swag2openapi:
 mod-up:
 	go mod tidy
 	@echo ">> updating Go dependencies"
-	@for m in $$(go list -mod=readonly -m -f '{{ if and (not .Indirect) (not .Main)}}{{.Path}}{{end}}' all); do \
-		go get $$m; \
-	done
+	@for m in $$(go list -mod=readonly -m -f '{{ if and (not .Indirect) (not .Main)}}{{.Path}}{{end}}' all); do go get $$m; done
 	go mod vendor
 
 mod:
@@ -73,12 +72,7 @@ move-in-docker:
 	mv docs/openapi-${VERSION}.json /app/docs/openapi-${VERSION}.json
 
 
-SSH_NAME=ssh_name
-REMOTE_PATH=/home/attapon/
 
-
-SSH_NAME=ssh_config_name
-REMOTE_PATH=/home/attapon/${BINARY}
 server-sync:
 	ssh ${SSH_NAME} "mkdir -p ${REMOTE_PATH}/logs"
 	scp deployments/docker-compose.yml ${SSH_NAME}:${REMOTE_PATH}/docker-compose.yml

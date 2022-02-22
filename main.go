@@ -37,20 +37,13 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// ---- Plaase Uncommant ---- //
-	// Serv(
-	// 	loader.Init(),
-	// 	controller.Init,
-	// 	route.Init)
+	// Serv(bootloader.Init(), controller.Init, route.Init)
 }
 
-func Serv(app *fiber.App, ctl func() []func(fiber.Router), rt func(fiber.Router, ...func(fiber.Router))) {
-	// production mode
-	// if !viper.GetBool("app.dev") {
+func Serv(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {
+	var RegisRoutes = controllerInit()
 
-	// }
-
-	var RegisRoutes = ctl()
-	rt(app, RegisRoutes...)
+	routeCreator(app, RegisRoutes...)
 
 	if !fiber.IsChild() {
 		log.Info().Msg("Parent process")
