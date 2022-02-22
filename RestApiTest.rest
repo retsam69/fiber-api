@@ -1,5 +1,0 @@
-@HOST=http://127.0.0.1:8888
-
-@BASE_URL={{HOST}}/api
-
-@AUTH=Authorization: Basic Admin 1234
