@@ -37,10 +37,10 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// ---- Plaase Uncommant ---- //
-	// Serv(bootloader.Init(), controller.Init, route.Init)
+	// StartService(bootloader.Init(), controller.Init, route.Init)
 }
 
-func Serv(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {
+func StartService(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {
 	var RegisRoutes = controllerInit()
 
 	routeCreator(app, RegisRoutes...)
