@@ -48,7 +48,9 @@ docker-build:
 	-git add .
 	-git cpush
 	make swagger-prd
+	echo "Start Build docker image: ${GIT_REGISTRY_URL}"
 	docker build \
+	--build-arg ENTRYPOINTNAME=${BINARY} \
 	-t ${GIT_REGISTRY_URL}:latest .
 
 docker-addtags:

@@ -1,10 +1,13 @@
+ARG GOVERSION=1.17
+ARG ALPINEVERSION=3.15
+ARG APPRUN=AppMain
 ############################
 # STEP 1 build executable binary
 ############################
-FROM golang:1.17-alpine  as builder
+FROM golang:${GOVERSION}-alpine${ALPINEVERSION}  as builder
 # install package for build
 RUN apk -U --no-cache add \
-    build-base git gcc bash tzdata git make ca-certificates dumb-init \
+    build-base git gcc tzdata make ca-certificates \
     && update-ca-certificates
 
 # Set TimeZone (require)
@@ -31,24 +34,23 @@ RUN make build-in-docker move-in-docker
 ############################
 # STEP 2 build a small image
 ############################
-FROM alpine
+FROM alpine:${ALPINEVERSION}
+
+ARG APPRUN
 
 WORKDIR /app
 
 # Import from builder.
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
 
 # Copy our static executable
 COPY --from=builder /app /app
 
 # Set TimeZone
 ENV TZ=Asia/Bangkok
-ENV PATH=/app:$PATH
-
-EXPOSE 80
+ENV APPRUN=${APPRUN}
+ENV ENVOLOPMENT=production
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-
-CMD ./AppMain
+CMD ["sh", "-c", "/app/${APPRUN}"]
