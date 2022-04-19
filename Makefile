@@ -65,10 +65,9 @@ docker-clean:
 build-in-docker:
 	CGO_ENABLED=0 GOOS=linux go build \
 	-a -installsuffix cgo ${LDFLAGS} \
-	-o ${BINARY} ${GOMAINFILE}
+	-o /app/${BINARY} ${GOMAINFILE}
 	
 move-in-docker:
-	mv ${BINARY} /app/${BINARY} 
 	mkdir -p /app/docs
 	mv docs/openapi-${VERSION}.json /app/docs/openapi-${VERSION}.json
 
