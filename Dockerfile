@@ -1,4 +1,4 @@
-ARG GOVERSION=1.17
+ARG GOVERSION=1.18
 ARG ALPINEVERSION=3.15
 ARG APPRUN=AppMain
 ############################
