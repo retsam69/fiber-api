@@ -10,10 +10,14 @@ import (
 //!  For Conntroller Template
 
 func init() {
-	RegisRoutes = append(RegisRoutes, func(r fiber.Router) {
-		log.Debug().Str("prefix", "/ping").Msg("Register Route: /ping ")
+
+	EndpointRegistor := func(r fiber.Router) {
+		log.Info().Str("path", "/ping").Msg("Register Route: /ping ")
 		r.Get("/ping", EndpointPing)
-	})
+	}
+
+	// ? ADD Register Route
+	RegisRoutes = append(RegisRoutes, EndpointRegistor)
 }
 
 // @Summary      Ping
@@ -24,5 +28,8 @@ func init() {
 // @security     BasicAuth
 // @Router       /ping [get]
 func EndpointPing(c *fiber.Ctx) error {
-	return c.SendStatus(200)
+	type Response struct {
+		OK bool `json:"ok"`
+	}
+	return c.JSON(Response{OK: true})
 }
