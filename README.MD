@@ -7,12 +7,10 @@
 ```shell
 cd __YOUR_PROJECT__
 
-git clone https://gitlab.com/indev-moph/fiber-api.git . \
-&& ./init.sh
+git clone https://gitlab.com/indev-moph/fiber-api.git . && ./init.sh
 
 # OR clone with ssh
-git clone git@gitlab.com:indev-moph/fiber-api.git . \
-&& ./init.sh
+git clone git@gitlab.com:indev-moph/fiber-api.git . && ./init.sh
 
 ```
 
