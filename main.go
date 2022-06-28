@@ -9,6 +9,9 @@ import (
 	"github.com/phuslu/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"gitlab.com/indev-moph/fiber-api/controller"
+	"gitlab.com/indev-moph/fiber-api/route"
+	"gitlab.com/indev-moph/fiber-api/service/bootloader"
 )
 
 var (
@@ -37,7 +40,7 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// ---- Plaase Uncommant ---- //
-	// StartService(bootloader.Init(), controller.Init, route.Init)
+	StartService(bootloader.Init(), controller.Init, route.Init)
 }
 
 func StartService(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {
