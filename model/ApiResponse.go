@@ -32,6 +32,7 @@ func (a *APIError) Default() {
 	a.OK = false
 }
 
+// * Interface request for set fiber.ErrorHendler
 func (a *APIError) SetError(c *fiber.Ctx, code int, err error) {
 	if err == nil {
 		return
