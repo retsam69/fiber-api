@@ -3,6 +3,7 @@ module gitlab.com/indev-moph/fiber-api
 go 1.18
 
 require (
+	github.com/attapon-th/gofiber-rapidoc v1.0.0
 	github.com/attapon-th/phuslulogger v1.0.1
 	github.com/gofiber/fiber/v2 v2.27.0
 	github.com/json-iterator/go v1.1.12

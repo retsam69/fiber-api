@@ -16,7 +16,7 @@ func Init(app fiber.Router, RegisRoutes ...func(fiber.Router)) {
 	UrlPrefix = viper.GetString("app.prefix")
 
 	//***** Register Routes Buildin  *****//
-	// EndpointSwagger(app, UrlPrefix+"/swagger")
+	EndpointSwagger(app, UrlPrefix+"/swagger")
 	// EndpointMonitor(app, UrlPrefix+"/dashboard")
 
 	rg := app.Group(UrlPrefix,

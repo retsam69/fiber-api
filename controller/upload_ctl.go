@@ -1,129 +1,129 @@
 package controller
 
-// import (
-// 	"fmt"
-// 	"io/ioutil"
-// 	"os"
-// 	"path"
-// 	"time"
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
+	"time"
 
-// 	"github.com/gofiber/fiber/v2"
-// 	"github.com/phuslu/log"
-// )
+	"github.com/gofiber/fiber/v2"
+	"github.com/phuslu/log"
+	"gitlab.com/indev-moph/fiber-api/controller/restapi"
+)
 
-// const (
-// 	DIR_STORAGE = "./storage/upload"
-// )
+const (
+	DIR_STORAGE = "./storage/upload"
+)
 
-// type ListFileInfo struct {
-// 	Name     string    `json:"name"`     // ชื่อไฟล์
-// 	Datetime time.Time `json:"datetime"` // วันที่ Upload
-// 	Size     int64     `json:"size"`     // ขนาดข้อมูล Byte(B)
-// 	SizeMB   string    `json:"size_mb"`  // ขนาดข้อมูล MagaByte(MB)
-// } // @name FileInfo
+type EndpointUploadFile struct{}
 
-// func init() {
-// 	_ = os.MkdirAll(DIR_STORAGE, os.ModePerm)
+type ListFileInfo struct {
+	Name     string    `json:"name"`     // ชื่อไฟล์
+	Datetime time.Time `json:"datetime"` // วันที่ Upload
+	Size     int64     `json:"size"`     // ขนาดข้อมูล Byte(B)
+	SizeMB   string    `json:"size_mb"`  // ขนาดข้อมูล MagaByte(MB)
+} // @name FileInfo
 
-// 	RegisRoutes = append(RegisRoutes, func(r fiber.Router) {
-// 		log.Debug().Str("prefix", "/ul").Msg("Register Route: Upload file.")
+func init() {
+	_ = os.MkdirAll(DIR_STORAGE, os.ModePerm)
 
-// 		rg := r.Group("/uploads", func(c *fiber.Ctx) error {
-// 			username := c.Locals("username").(string)
-// 			if username != "admin" {
-// 				return c.SendStatus(403)
-// 			}
-// 			return c.Next()
-// 		})
-// 		rg.Get("/list", ListFile)
-// 		rg.Get("/dl", DownloadFile)
-// 		rg.Post("/", UploadFile)
-// 		rg.Delete("/", DeleteFile)
-// 	})
-// }
+	endpoint := EndpointUploadFile{}
+	RegisRoutes = append(RegisRoutes, func(r fiber.Router) {
+		rg := restapi.NewRestApi(r, "/uploads", endpoint, func(c *fiber.Ctx) error {
+			username, ok := c.Locals("username").(string)
+			if !ok || username != "admin" {
+				return &fiber.Error{
+					Code:    fiber.StatusForbidden,
+					Message: "Permission Denind.",
+				}
+			}
+			return c.Next()
+		})
+		_ = rg
+	})
+}
 
-// // ListFiles godoc
-// // @Summary  ListFiles
-// // @Description
-// // @Tags      Upload
-// // @Produce   json
-// // @Success   200      {object}  []ListFileInfo  status
-// // @Failure   default  {string}  string
-// // @security  BasicAuth
-// // @Router    /uploads/list [get]
-// func ListFile(c *fiber.Ctx) error {
-// 	files, err := ioutil.ReadDir(DIR_STORAGE)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	result := []ListFileInfo{}
-// 	for _, f := range files {
-// 		result = append(result, ListFileInfo{
-// 			Name:     f.Name(),
-// 			Datetime: f.ModTime(),
-// 			Size:     f.Size(),
-// 			SizeMB:   fmt.Sprintf("%.2f", (float64(f.Size()) / (1024.0 * 1024.0))),
-// 		})
-// 	}
-// 	return c.JSON(result)
-// }
+// DownloadFile godoc
+// @Summary  ListFiles
+// @Description
+// @Tags      Upload
+// @Produce   json
+// @Success   200      {object}  []ListFileInfo  list  file  upload
+// @Failure   default  {string}  string
+// @security  BasicAuth
+// @Router    /uploads [get]
+func (EndpointUploadFile) Get(c *fiber.Ctx) error {
+	files, err := ioutil.ReadDir(DIR_STORAGE)
+	if err != nil {
+		return err
+	}
+	result := []ListFileInfo{}
+	for _, f := range files {
+		result = append(result, ListFileInfo{
+			Name:     f.Name(),
+			Datetime: f.ModTime(),
+			Size:     f.Size(),
+			SizeMB:   fmt.Sprintf("%.2f", (float64(f.Size()) / (1024.0 * 1024.0))),
+		})
+	}
+	return c.JSON(result)
+}
 
-// // DownloadFile godoc
-// // @Summary  DownloadFile
-// // @Description
-// // @Tags      Upload
-// // @Produce   octet-stream
-// // @Param     f        query     string  true  "Filename for download."
-// // @Success   200      {string}  string
-// // @Failure   default  {string}  string
-// // @security  BasicAuth
-// // @Router    /uploads/dl [get]
-// func DownloadFile(c *fiber.Ctx) error {
-// 	fdl := c.Query("f", ".emptyfile")
-// 	filename := path.Join(DIR_STORAGE, fdl)
-// 	if _, err := os.Lstat(filename); err != nil {
-// 		log.Debug().Str("filename", filename).Msg("File Not Found.")
-// 		return c.Status(404).SendString("File Not Found.")
-// 	}
-// 	return c.SendFile(filename, false)
-// }
+// DownloadFile godoc
+// @Summary  DownloadFile
+// @Description
+// @Tags      Upload
+// @Produce   octet-stream
+// @Param     name     path      string  true  "Filename for download."
+// @Success   200      {string}  string
+// @Failure   default  {string}  string
+// @security  BasicAuth
+// @Router    /uploads/{name} [get]
+func (EndpointUploadFile) GetByID(c *fiber.Ctx, name string) error {
+	filename := path.Join(DIR_STORAGE, name)
+	if _, err := os.Lstat(filename); err != nil {
+		log.Debug().Str("filename", filename).Msg("File Not Found.")
+		return c.Status(404).SendString("File Not Found.")
+	}
+	return c.SendFile(filename, false)
+}
 
-// // UploadFile godoc
-// // @Summary  UploadFile
-// // @Description
-// // @Tags      Upload
-// // @Produce   octet-stream
-// // @Param     n        formData  string  false  "Set filename (Default: fileupload name)"
-// // @Param     f        formData  file    true   "FileUpload."
-// // @Success   200      {string}  string
-// // @Failure   default  {string}  string
-// // @security  BasicAuth
-// // @Router    /uploads [post]
-// func UploadFile(c *fiber.Ctx) error {
-// 	file, err := c.FormFile("f")
-// 	if err != nil {
-// 		return err
-// 	}
-// 	filename := c.FormValue("n", file.Filename)
-// 	log.Debug().Msgf("Upload File: %s", filename)
-// 	return c.SaveFile(file, path.Join(DIR_STORAGE, filename))
-// }
+// UploadFile godoc
+// @Summary  UploadFile
+// @Description
+// @Tags      Upload
+// @Produce   octet-stream
+// @Param     n        formData  string  false  "Set filename (Default: fileupload name)"
+// @Param     f        formData  file    true   "FileUpload."
+// @Success   200      {string}  string
+// @Failure   default  {string}  string
+// @security  BasicAuth
+// @Router    /uploads [post]
+func (EndpointUploadFile) Add(c *fiber.Ctx) error {
+	file, err := c.FormFile("f")
+	if err != nil {
+		return err
+	}
+	filename := c.FormValue("n", file.Filename)
+	log.Debug().Msgf("Upload File: %s", filename)
+	return c.SaveFile(file, path.Join(DIR_STORAGE, filename))
+}
 
-// // DeleteFile godoc
-// // @Summary  DeleteFile
-// // @Description
-// // @Tags      Upload
-// // @Produce   plain
-// // @Param     f        query     string  true  "Filename for delete."
-// // @Success   200      {string}  string
-// // @Failure   default  {string}  string
-// // @security  BasicAuth
-// // @Router    /uploads [delete]
-// func DeleteFile(c *fiber.Ctx) error {
-// 	fdl := c.Query("f", "")
-// 	filename := path.Join(DIR_STORAGE, fdl)
-// 	if _, err := os.Stat(filename); err != nil {
-// 		return c.Status(404).SendString("File Not Found.")
-// 	}
-// 	return os.Remove(filename)
-// }
+// DeleteFile godoc
+// @Summary  DeleteFile
+// @Description
+// @Tags      Upload
+// @Produce   plain
+// @Param     name     path      string  true  "Filename for delete."
+// @Success   200      {string}  string
+// @Failure   default  {string}  string
+// @security  BasicAuth
+// @Router    /uploads/{name} [delete]
+func (EndpointUploadFile) Delete(c *fiber.Ctx, name string) error {
+	filename := path.Join(DIR_STORAGE, name)
+	if _, err := os.Stat(filename); err != nil {
+		return c.Status(404).SendString("File Not Found.")
+	}
+	return os.Remove(filename)
+}

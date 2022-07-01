@@ -10,8 +10,9 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gitlab.com/indev-moph/fiber-api/controller"
+	"gitlab.com/indev-moph/fiber-api/model"
 	"gitlab.com/indev-moph/fiber-api/route"
-	"gitlab.com/indev-moph/fiber-api/service/bootloader"
+	"gitlab.com/indev-moph/fiber-api/service/fiber_startup"
 )
 
 var (
@@ -28,7 +29,7 @@ var (
 // @contact.email
 // @schemes                    http
 // @host                       localhost:8888
-// @BasePath                   /
+// @BasePath                   /api
 // @securityDefinitions.basic  BasicAuth
 func main() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
@@ -39,8 +40,12 @@ func main() {
 	pflag.Parse()
 	_ = viper.BindPFlags(pflag.CommandLine)
 
-	// ---- Plaase Uncommant ---- //
-	StartService(bootloader.Init(), controller.Init, route.Init)
+	// * ---- Plaase Uncommant ---- //
+	fiber_startup.FiberConfig.ErrorHandler = fiber_startup.NewErrorHandlerJson(&model.APIError{})
+	app := fiber_startup.NewFiberApp()
+	StartService(app, controller.Init, route.Init)
+	// * ---- END Uncommant ---- //
+
 }
 
 func StartService(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {

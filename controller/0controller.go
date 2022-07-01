@@ -13,7 +13,11 @@ func Init() []func(fiber.Router) {
 	log.Info().Msg("Init Controller")
 	//
 	// * Code init any more
-	// ? Example: Connect database || Init value for controller
-	//
+	NewDatabase()
+
 	return RegisRoutes
+}
+
+func NewDatabase() {
+
 }

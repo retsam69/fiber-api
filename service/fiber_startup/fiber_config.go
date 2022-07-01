@@ -1,4 +1,4 @@
-package bootloader
+package fiber_startup
 
 import (
 	"runtime"
@@ -10,27 +10,28 @@ import (
 
 var (
 	Json        jsoniter.API
-	fiberConfig fiber.Config
+	FiberConfig fiber.Config
 	FiberApp    *fiber.App
 )
 
-func SetupFiberApp() {
+func init() {
 	Json = jsoniter.ConfigCompatibleWithStandardLibrary
-	fiberConfig = fiber.Config{
+	FiberConfig = fiber.Config{
 		JSONEncoder:   Json.Marshal,
 		JSONDecoder:   Json.Unmarshal,
 		Prefork:       true,
 		CaseSensitive: true,
 		StrictRouting: true,
 		ServerHeader:  "FiberV2",
-		ErrorHandler:  FiberErrorHandler,
 	}
+}
 
+func SetupFiberApp() {
 	maxProcess := viper.GetInt("app.maxprocs")
 	if maxProcess > 0 {
 		runtime.GOMAXPROCS(maxProcess)
 	} else if maxProcess == 0 {
-		fiberConfig.Prefork = false
+		FiberConfig.Prefork = false
 	}
-	FiberApp = fiber.New(fiberConfig)
+	FiberApp = fiber.New(FiberConfig)
 }

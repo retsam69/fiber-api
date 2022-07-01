@@ -1,4 +1,4 @@
-package bootloader
+package fiber_startup
 
 import (
 	"net/url"

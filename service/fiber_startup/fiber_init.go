@@ -1,11 +1,11 @@
-package bootloader
+package fiber_startup
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
 )
 
-func Init() *fiber.App {
+func NewFiberApp() *fiber.App {
 	loadDefaultConfig()
 	if fileConfig := viper.GetString("config"); fileConfig != "" {
 		LoadConfigByFile(fileConfig, false)
