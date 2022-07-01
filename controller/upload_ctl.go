@@ -29,19 +29,21 @@ func init() {
 	_ = os.MkdirAll(DIR_STORAGE, os.ModePerm)
 
 	endpoint := EndpointUploadFile{}
-	RegisRoutes = append(RegisRoutes, func(r fiber.Router) {
-		rg := restapi.NewRestApi(r, "/uploads", endpoint, func(c *fiber.Ctx) error {
-			username, ok := c.Locals("username").(string)
-			if !ok || username != "admin" {
-				return &fiber.Error{
-					Code:    fiber.StatusForbidden,
-					Message: "Permission Denind.",
+	RegisRoutes = append(RegisRoutes,
+		func(r fiber.Router) {
+			rg := restapi.NewRestApi(r, "/uploads", endpoint, func(c *fiber.Ctx) error {
+				username, ok := c.Locals("username").(string)
+				if !ok || username != "admin" {
+					return &fiber.Error{
+						Code:    fiber.StatusForbidden,
+						Message: "Permission Denind.",
+					}
 				}
-			}
-			return c.Next()
-		})
-		_ = rg
-	})
+				return c.Next()
+			})
+			_ = rg
+		},
+	)
 }
 
 // DownloadFile godoc
