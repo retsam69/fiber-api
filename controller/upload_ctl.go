@@ -9,7 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/phuslu/log"
-	"gitlab.com/indev-moph/fiber-api/controller/restapi"
+	"gitlab.com/indev-moph/fiber-api/service/restapi"
 )
 
 const (
