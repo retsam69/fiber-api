@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gitlab.com/indev-moph/fiber-api/controller"
-	"gitlab.com/indev-moph/fiber-api/model"
+	"gitlab.com/indev-moph/fiber-api/model/api_response"
 	"gitlab.com/indev-moph/fiber-api/route"
 	"gitlab.com/indev-moph/fiber-api/service/fiber_startup"
 )
@@ -41,17 +41,16 @@ func main() {
 	_ = viper.BindPFlags(pflag.CommandLine)
 
 	// * ---- Plaase Uncommant ---- //
-	fiber_startup.FiberConfig.ErrorHandler = fiber_startup.NewErrorHandlerJson(&model.APIError{})
+	fiber_startup.FiberConfig.ErrorHandler = fiber_startup.NewErrorHandlerJson(api_response.NewAPIError())
 	app := fiber_startup.NewFiberApp()
 	StartService(app, controller.Init, route.Init)
 	// * ---- END Uncommant ---- //
 
 }
 
-func StartService(app *fiber.App, controllerInit func() []func(fiber.Router), routeCreator func(fiber.Router, ...func(fiber.Router))) {
-	var RegisRoutes = controllerInit()
-
-	routeCreator(app, RegisRoutes...)
+func StartService(app *fiber.App, controllerInit func(), routeCreator func(fiber.Router)) {
+	controllerInit()
+	routeCreator(app)
 
 	if !fiber.IsChild() {
 		log.Info().Msg("Parent process")
