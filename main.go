@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gitlab.com/indev-moph/fiber-api/controller"
+	"gitlab.com/indev-moph/fiber-api/fiber_startup"
 	"gitlab.com/indev-moph/fiber-api/model/api_response"
 	"gitlab.com/indev-moph/fiber-api/route"
-	"gitlab.com/indev-moph/fiber-api/service/fiber_startup"
 )
 
 var (
@@ -45,7 +45,6 @@ func main() {
 	app := fiber_startup.NewFiberApp()
 	StartService(app, controller.Init, route.Init)
 	// * ---- END Uncommant ---- //
-
 }
 
 func StartService(app *fiber.App, controllerInit func(), routeCreator func(fiber.Router)) {
