@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gitlab.com/indev-moph/fiber-api/controller"
-	"gitlab.com/indev-moph/fiber-api/fiber_startup"
 	"gitlab.com/indev-moph/fiber-api/model/api_response"
 	"gitlab.com/indev-moph/fiber-api/route"
+	"gitlab.com/indev-moph/fiber-api/setup/fiber_startup"
 )
 
 var (

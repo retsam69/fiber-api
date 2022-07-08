@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/phuslu/log"
 	"gitlab.com/indev-moph/fiber-api/controller/ctl"
-	"gitlab.com/indev-moph/fiber-api/controller/ep_upload"
+	"gitlab.com/indev-moph/fiber-api/controller/upload_endpoint"
 )
 
 func Init() {
@@ -13,6 +13,6 @@ func Init() {
 	ctl.NewConnectionMysql()
 
 	// ! Initialization Endpoint by other package
-	ep_upload.Init()
+	upload_endpoint.Init()
 
 }

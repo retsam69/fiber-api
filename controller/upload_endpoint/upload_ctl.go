@@ -1,4 +1,4 @@
-package ep_upload
+package upload_endpoint
 
 import (
 	"fmt"
