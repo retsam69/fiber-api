@@ -16,9 +16,10 @@ import (
 )
 
 var (
-	AppName string
-	Version string
-	Build   string
+	AppName   string
+	Version   string
+	Build     string
+	DateBuild string
 )
 
 // @title        API
@@ -32,7 +33,7 @@ var (
 // @BasePath                   /api
 // @securityDefinitions.basic  BasicAuth
 func main() {
-	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\n", AppName, Version, Build)
+	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\nDate: ", AppName, Version, Build, DateBuild)
 	logger.SetDefaultlogger()
 	viper.SetDefault("version", Version)
 	viper.SetDefault("build", Build)

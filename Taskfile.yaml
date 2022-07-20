@@ -1,0 +1,55 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  APP_NAME: AppName
+  APP_VERSION: 0.0.0
+  APP_BUILD:
+    sh: git log -n 1 --format=%H
+  APP_DATE:
+    sh: git log -n 1 --format=%aI
+  LDFLAGS: -ldflags " -X main.Version={{.APP_VERSION}} -X main.Build={{.APP_BUILD}} -X main.DateBuild={{.APP_DATE}} "
+
+  GO_MAINFILE: main.go
+  APP_GMF: gmf
+  GO_MODULE:
+    sh: go mod why -m | {{.APP_GMF}} stdin -n 1 -r  "^# (.+)\$" "\$1"
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.LDFLAGS}}"
+    silent: true
+  dev:
+    cmds:
+      - go run {{.LDFLAGS}} {{.GO_MAINFILE}} -c dev.env {{.CLI_ARGS}}
+
+  swagger:
+    cmds:
+      - swag fmt
+      - rm -rf ./docs
+      - swag init --parseInternal --generatedTime
+      - task: swag2openapi
+  swagger-prd:
+    cmds:
+      - swag fmt
+      - rm -rf ./docs
+      - swag init --parseInternal --generatedTime -g main.go-prd
+      - task: swag2openapi
+  swag2openapi:
+    cmds:
+      - |
+        curl -X POST "https://converter.swagger.io/api/convert" \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -d @./docs/swagger.json \
+        > docs/openapi-{{.APP_VERSION}}.json
+
+  # TODO: Request Tools for Devolopment.
+  install-tools:
+    cmds:
+      - echo "Install `attapon-th/gmf`"
+      - go install github.com/attapon-th/gmf/cmd/gmf@latest
+      - echo "Install `swaggo/swag`"
+      - go install github.com/swaggo/swag/cmd/swag@latest
