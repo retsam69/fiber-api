@@ -2,6 +2,10 @@
 
 version: "3"
 
+#### --- Includes --- ####
+includes:
+  os: ./bin/Taskfile_{{OS}}.yaml
+
 vars:
   APP_NAME: AppName
   APP_VERSION: 0.0.0
@@ -19,32 +23,27 @@ vars:
 tasks:
   default:
     cmds:
-      - echo "{{.LDFLAGS}}"
+      - echo "OS - {{OS}}"
+      - task --list-all
     silent: true
+
   dev:
     cmds:
       - go run {{.LDFLAGS}} {{.GO_MAINFILE}} -c dev.env {{.CLI_ARGS}}
 
-  swagger:
+  mod:
     cmds:
-      - swag fmt
-      - rm -rf ./docs
-      - swag init --parseInternal --generatedTime
-      - task: swag2openapi
-  swagger-prd:
+      - go mod download
+      - go mod tidy
+      - go mod vendor
+
+  swag:
     cmds:
-      - swag fmt
-      - rm -rf ./docs
-      - swag init --parseInternal --generatedTime -g main.go-prd
-      - task: swag2openapi
-  swag2openapi:
+      - os:swagger
+
+  swag-prd:
     cmds:
-      - |
-        curl -X POST "https://converter.swagger.io/api/convert" \
-        -H "accept: application/json" \
-        -H "Content-Type: application/json" \
-        -d @./docs/swagger.json \
-        > docs/openapi-{{.APP_VERSION}}.json
+      - os:swagger-prd
 
   # TODO: Request Tools for Devolopment.
   install-tools:

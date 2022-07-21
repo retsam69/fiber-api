@@ -32,6 +32,7 @@ var (
 // @host                       localhost:8888
 // @BasePath                   /api
 // @securityDefinitions.basic  BasicAuth
+
 func main() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\nDate: ", AppName, Version, Build, DateBuild)
 	logger.SetDefaultlogger()
