@@ -5,7 +5,7 @@ version: "3"
 #### --- Includes --- ####
 includes:
   swag: ./bin/Taskfile_swagger.yaml
-  tools: ./bin/Taskfile_Tools.yaml
+  tool: ./bin/Taskfile_Tools.yaml
   project: ./bin/Taskfile_project.yaml
   os: ./bin/Taskfile_{{OS}}.yaml
 
