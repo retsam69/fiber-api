@@ -1,24 +1,6 @@
 version: "3"
 
 tasks:
-  swagger:
+  rm:
     cmds:
-      - rm -rf ./docs
-      - swag fmt
-      - swag init --parseInternal --generatedTime
-      - task: swag2openapi
-  swagger-prd:
-    cmds:
-      - rm -rf ./docs
-      - swag fmt
-      - swag init --parseInternal --generatedTime -g _main4production
-      - task: swag2openapi
-
-  swag2openapi:
-    cmds:
-      - |
-        curl -X POST "https://converter.swagger.io/api/convert" \
-        -H "accept: application/json" \
-        -H "Content-Type: application/json" \
-        -d @./docs/swagger.json \
-        > docs/openapi-{{.APP_VERSION}}.json
+      - rm -f {{.CLI_ARGS}}

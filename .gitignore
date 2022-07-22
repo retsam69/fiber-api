@@ -5,3 +5,5 @@
 /logs
 *.code-workspace
 /_test
+/swagger
+/storage/*

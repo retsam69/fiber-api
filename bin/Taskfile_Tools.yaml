@@ -1,0 +1,10 @@
+version: "3"
+tasks:
+  install:
+    cmds:
+      - echo "Install 'attapon-th/gmf;"
+      - go install github.com/attapon-th/gmf/cmd/gmf@latest
+      - echo "Install 'swaggo/swag'"
+      - go install github.com/swaggo/swag/cmd/swag@latest
+      - echo "Install 'go-imports-rename'"
+      - go install github.com/sirkon/go-imports-rename@latest

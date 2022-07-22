@@ -51,14 +51,14 @@ func MiddlewareVerifyACL(c *fiber.Ctx) error {
 }
 
 // DownloadFile godoc
-// @Summary  ListFiles
+// @Summary ListFiles
 // @Description
-// @Tags      Upload
-// @Produce   json
-// @Success   200      {object}  []ListFileInfo  list  file  upload
-// @Failure   default  {string}  string
-// @security  BasicAuth
-// @Router    /uploads [get]
+// @Tags     Upload
+// @Produce  json
+// @Success  200     {object} []ListFileInfo list file upload
+// @Failure  default {string} string
+// @security BasicAuth
+// @Router   /uploads [get]
 func (EndpointUploadFile) Get(c *fiber.Ctx) error {
 	files, err := ioutil.ReadDir(DIR_STORAGE)
 	if err != nil {
@@ -77,15 +77,15 @@ func (EndpointUploadFile) Get(c *fiber.Ctx) error {
 }
 
 // DownloadFile godoc
-// @Summary  DownloadFile
+// @Summary DownloadFile
 // @Description
-// @Tags      Upload
-// @Produce   octet-stream
-// @Param     name     path      string  true  "Filename for download."
-// @Success   200      {string}  string
-// @Failure   default  {string}  string
-// @security  BasicAuth
-// @Router    /uploads/{name} [get]
+// @Tags     Upload
+// @Produce  octet-stream
+// @Param    name    path     string true "Filename for download."
+// @Success  200     {string} string
+// @Failure  default {string} string
+// @security BasicAuth
+// @Router   /uploads/{name} [get]
 func (EndpointUploadFile) GetByID(c *fiber.Ctx, name string) error {
 	filename := path.Join(DIR_STORAGE, name)
 	if _, err := os.Lstat(filename); err != nil {
@@ -96,16 +96,16 @@ func (EndpointUploadFile) GetByID(c *fiber.Ctx, name string) error {
 }
 
 // UploadFile godoc
-// @Summary  UploadFile
+// @Summary UploadFile
 // @Description
-// @Tags      Upload
-// @Produce   octet-stream
-// @Param     n        formData  string  false  "Set filename (Default: fileupload name)"
-// @Param     f        formData  file    true   "FileUpload."
-// @Success   200      {string}  string
-// @Failure   default  {string}  string
-// @security  BasicAuth
-// @Router    /uploads [post]
+// @Tags     Upload
+// @Produce  octet-stream
+// @Param    n       formData string false "Set filename (Default: fileupload name)"
+// @Param    f       formData file   true  "FileUpload."
+// @Success  200     {string} string
+// @Failure  default {string} string
+// @security BasicAuth
+// @Router   /uploads [post]
 func (EndpointUploadFile) Add(c *fiber.Ctx) error {
 	file, err := c.FormFile("f")
 	if err != nil {
@@ -117,15 +117,15 @@ func (EndpointUploadFile) Add(c *fiber.Ctx) error {
 }
 
 // DeleteFile godoc
-// @Summary  DeleteFile
+// @Summary DeleteFile
 // @Description
-// @Tags      Upload
-// @Produce   plain
-// @Param     name     path      string  true  "Filename for delete."
-// @Success   200      {string}  string
-// @Failure   default  {string}  string
-// @security  BasicAuth
-// @Router    /uploads/{name} [delete]
+// @Tags     Upload
+// @Produce  plain
+// @Param    name    path     string true "Filename for delete."
+// @Success  200     {string} string
+// @Failure  default {string} string
+// @security BasicAuth
+// @Router   /uploads/{name} [delete]
 func (EndpointUploadFile) Delete(c *fiber.Ctx, name string) error {
 	filename := path.Join(DIR_STORAGE, name)
 	if _, err := os.Stat(filename); err != nil {

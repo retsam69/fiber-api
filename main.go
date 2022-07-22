@@ -12,7 +12,7 @@ import (
 	"gitlab.com/indev-moph/fiber-api/controller"
 	"gitlab.com/indev-moph/fiber-api/model/api_response"
 	"gitlab.com/indev-moph/fiber-api/route"
-	"gitlab.com/indev-moph/fiber-api/setup/fiber_startup"
+	"gitlab.com/indev-moph/fiber-api/service/fiber_startup"
 )
 
 var (
@@ -22,16 +22,16 @@ var (
 	DateBuild string
 )
 
-// @title        API
-// @version      1
-// @description  API Service
+// @title       API
+// @version     1
+// @description API Service
 // @contact.name
 // @contact.url
 // @contact.email
-// @schemes                    http
-// @host                       localhost:8888
-// @BasePath                   /api
-// @securityDefinitions.basic  BasicAuth
+// @schemes                   http
+// @host                      localhost:8888
+// @BasePath                  /api
+// @securityDefinitions.basic BasicAuth
 
 func main() {
 	fmt.Printf("AppName: %s\nVersion: %s\nBuild: %s\nDate: ", AppName, Version, Build, DateBuild)

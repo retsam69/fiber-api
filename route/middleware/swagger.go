@@ -9,7 +9,7 @@ import (
 )
 
 func EndpointSwagger(r fiber.Router, prefix string) {
-	UrlSwaggerFile := fmt.Sprintf("%s/docs/openapi-%s.json", prefix, viper.GetString("version"))
+	UrlSwaggerFile := fmt.Sprintf("%s/swagger/openapi-%s.json", prefix, viper.GetString("version"))
 	r.Get(prefix+"/*", rapidoc.New(rapidoc.Config{
 		Title:       "Service API",
 		HeaderText:  "Service API",

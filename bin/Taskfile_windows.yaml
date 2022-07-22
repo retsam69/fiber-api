@@ -1,0 +1,5 @@
+version: "3"
+
+tasks:
+  rm:
+    cmds: del /f {{.CLI_ARGS}}

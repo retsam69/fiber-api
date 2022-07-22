@@ -21,13 +21,13 @@ func init() {
 	)
 }
 
-// @Summary      Ping
-// @Description  Ping Api Server
-// @Tags         General
-// @Success      200      {string}  string  status
-// @Failure      default  {string}  string
-// @security     BasicAuth
-// @Router       /ping [get]
+// @Summary     Ping
+// @Description Ping Api Server
+// @Tags        General
+// @Success     200     {string} string status
+// @Failure     default {string} string
+// @security    BasicAuth
+// @Router      /ping [get]
 func EndpointPing(c *fiber.Ctx) error {
 	res := api_response.NewAPIResponse()
 	res.OK = true

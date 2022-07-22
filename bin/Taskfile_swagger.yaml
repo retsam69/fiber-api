@@ -1,0 +1,27 @@
+version: "3"
+vars:
+  SWAGGER_OUTPUT: ./swagger
+
+tasks:
+  dev:
+    cmds:
+      - swag fmt
+      - swag init --parseInternal --ot 'json' --output {{.SWAGGER_OUTPUT}}
+      - task: swag2openapi
+  prd:
+    cmds:
+      - swag fmt
+      - swag init --parseInternal --outputTypes 'json' --output {{.SWAGGER_OUTPUT}}  -g _main4prd.go
+      - task: swag2openapi
+
+  swag2openapi:
+    cmds:
+      - |
+        curl -X POST "https://converter.swagger.io/api/convert" \
+        -H "accept: application/json" \
+        -H "Content-Type: application/json" \
+        -d @./docs/swagger.json \
+        > {{.SWAGGER_OUTPUT}}/openapi-{{.APP_VERSION}}.json
+  clean:
+    cmds:
+      - rm -rf {{.SWAGGER_OUTPUT}}

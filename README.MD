@@ -2,16 +2,35 @@
 
 # By `gofiber/fiber` Framework
 
-## Step 1: Get Project
+## Install Tools
+
+1. Install `taskfile` Tool
+>  [https://taskfile.dev/installation/#package-managers](https://taskfile.dev/installation/#package-managers)
+>
+> install with script
+> ```shell
+> sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
+> ```
+
+2. Install Tools (autumatic require `taskfile tools`)
+> ```shell
+> task tool:install
+> ```
+## Get Project
 
 ```shell
-cd __YOUR_PROJECT__
+# 1 - create project directory
+mkdir _project_name_
 
-git clone https://gitlab.com/indev-moph/fiber-api.git . && ./init.sh
+#2 - cd to directory
+cd _project_name_
 
-# OR clone with ssh
-git clone git@gitlab.com:indev-moph/fiber-api.git . && ./init.sh
 
+#3 - git clone project
+git clone https://gitlab.com/indev-moph/fiber-api.git . 
+
+#4 init project 
+task prject:init
 ```
 
 ## Set `go/bin` path in `$PATH` Envolopment if your not set

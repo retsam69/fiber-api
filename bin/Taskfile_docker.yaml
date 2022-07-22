@@ -1,0 +1,26 @@
+version: "3"
+
+vars:
+  BINARY: '{{default "AppName" .BINARY}}'
+
+tasks:
+  build:
+    cmds:
+      - gmf version -i
+      - task: swag-prd
+      - cmd: git cpush
+        ignore_error: true
+  docker-build:
+    cmds:
+      - docker build --build-arg ENTRYPOINTNAME=${BINARY} -t ${DOCKER_REGISTRY_URL}:latest .
+
+  docker-push:
+    cmds:
+      - docker push {{.DOCKER_REGISTRY_URL}}:latest
+
+  build-execuable:
+    cmds:
+      - |
+        CGO_ENABLED=0 GOOS=linux go build \
+        -a -installsuffix cgo {{.LDFLAGS}} \
+        -o /app/${BINARY} {{.GO_MAINFILE}}
